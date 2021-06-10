@@ -1,3 +1,6 @@
+import "../css/popup.css";
+//import hello from "./popup/example";
+
 
 let startTest = document.getElementById('startTest');
 let testResults = document.getElementById('testResults');
@@ -118,6 +121,7 @@ chrome.windows.getCurrent(window => {
 
 
 windowID.innerText = "windowID";
+
 
 
 
