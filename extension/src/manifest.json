@@ -1,9 +1,13 @@
 {
   "name": "XS-Leak Searcher",
   "permissions": ["activeTab","declarativeContent","storage", "tabs", "*://*/*"],
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "background": {
-    "page": "background.html"
+    "page": "background.html",
+    "persistent": true
   },
   "browser_action": {
     "default_popup": "popup.html",
@@ -13,7 +17,7 @@
     {
         "js": ["content.bundle.js"],
         "matches": ["*://*/*"],
-        "run_at": "document_start"
+        "run_at": "document_end"
     }
   ],
   "icons": {

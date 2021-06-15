@@ -7,6 +7,7 @@
     "start": "node utils/webserver.js"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.145",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.5",
     "css-loader": "3.2.0",

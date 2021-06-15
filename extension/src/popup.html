@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
   body{
-    width: 450px;
-    height:450px;
+    width: 600px;
+    height:550px;
   }
   </style>
    <!-- <style>
@@ -16,6 +19,7 @@
     </style>-->
   </head>
   <body>
+  <!--
     <button id="startTest">Test</button> | <button id="createWindow">Create Window</button> +
     | <button id="sendMessage">Send Message</button> | <button id="changeSite">Change Site</button> WindowID: <span id="windowID"></span>
      
@@ -27,6 +31,30 @@
       </tr>
 
 </table>
+-->
+<div class="container-fluid">
+  <h3>XS-Leak Searcher</h3>
+  <button class="btn btn-primary" type="button" id="btnActivate">Activate</button>
+  <button class="btn btn-primary" type="button" id="btnDeactivate" disabled>Deactivate</button>
+ <hr>
+ <fieldset id="extensionControl" disabled> 
+ <div class="row g-3 align-items-center">
+  <div class="col-auto">
+     <label for="txtStateName" class="col-form-label">State name</label>
+  </div>
+  <div class="col-auto">
+    <input type="text" class="form-control" id="txtStateName">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Set state name</button>
+  </div>
+</div>
+  <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="switchMasterMode" checked>
+  <label class="form-check-label" for="switchMasterMode">Master-Mode</label>
+</div>
+</fieldset>
+</div>
 
   </body>
 </html>

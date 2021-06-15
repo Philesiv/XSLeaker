@@ -1,4 +1,6 @@
 import "../css/popup.css";
+import "../css/bootstrap.min.css";
+import "./popup/bootstrap.bundle.min.js";
 //import hello from "./popup/example";
 
 
@@ -11,7 +13,7 @@ let changeSiteBtn = document.getElementById('changeSite');
 
 var compareWindowId;
 
-
+/* refactor this to background
 const ws = new WebSocket('ws://localhost:3030');
 ws.onopen = () => { 
   console.log('Now connected'); 
@@ -36,18 +38,19 @@ ws.onmessage = (event) => {
     console.log(message);
   });
 };
-
+*/
+/*
 sendMessage.onclick = function(event) {
   let message = {
     "action": "getResults"
   }
   ws.send(JSON.stringify(message));
 }
+*/
 
 
 
-
-
+/*
 function getIframes () {
   //get iframe count from main window
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -57,7 +60,7 @@ function getIframes () {
         'name': 'iframe',
         'value': response.iframes
       };
-      ws.send(JSON.stringify(message));
+      //ws.send(JSON.stringify(message));
       addRow("IFrames", response.iframes);
     });
   });
@@ -69,13 +72,13 @@ function getIframes () {
     });
   });
   */
+ /*
   console.log(iframeCount);
   return iframeCount;
 }
 
 startTest.onclick = function(element) {
   getIframes();
-  
 };
 
 
@@ -87,7 +90,7 @@ changeSiteBtn.onclick = (element) => {
       'url': url
     };
     console.log(message);
-    ws.send(JSON.stringify(message));
+    //ws.send(JSON.stringify(message));
   });
 };
 
@@ -121,8 +124,61 @@ chrome.windows.getCurrent(window => {
 
 
 windowID.innerText = "windowID";
+*/
+let backgroundPort = chrome.runtime.connect({name: "popup-connection"});
+
+backgroundPort.onMessage.addListener((msg) => {
+  alert("Message received!" + msg);
+});
 
 
+function restore_settings() {
+  chrome.storage.local.get({
+    masterMode: false,
+    active: false
+  }, (items) => {
+    document.getElementById('switchMasterMode').checked = items.masterMode;
+    if (items.active){
+      document.getElementById('extensionControl').disabled = false;
+      document.getElementById('btnDeactivate').disabled = false;
+      document.getElementById('btnActivate').disabled = true;
+    }
 
+});
+}
 
+function toggleMasterMode() {
+  let checkbox = document.getElementById('switchMasterMode');
+  chrome.storage.local.set({
+    masterMode: checkbox.checked
+  });
+}
 
+function activateExtension(){
+  document.getElementById('extensionControl').disabled = false;
+  document.getElementById('btnDeactivate').disabled = false;
+  document.getElementById('btnActivate').disabled = true;
+  chrome.storage.local.set({
+    active: true 
+  });
+  backgroundPort.postMessage({action: "connect"});
+}
+
+function deactivateExtension(){
+  // reset UI
+  document.getElementById('extensionControl').disabled = true;
+  document.getElementById('btnDeactivate').disabled = true;
+  document.getElementById('btnActivate').disabled = false;
+  document.getElementById('switchMasterMode').checked = false;
+  // reset values
+  toggleMasterMode();
+  chrome.storage.local.set({
+    active: false 
+  });
+  backgroundPort.postMessage({action: "disconnect"});
+}
+
+document.addEventListener('DOMContentLoaded', restore_settings);
+document.getElementById('switchMasterMode').addEventListener('click', toggleMasterMode);
+document.getElementById('btnActivate').addEventListener('click', activateExtension);
+document.getElementById('btnDeactivate').addEventListener('click', deactivateExtension);
