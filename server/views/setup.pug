@@ -1,0 +1,12 @@
+extends tests
+
+block test 
+    form(method="post")
+        .row.mb-3 
+            .col-8 
+                select.form-select.form-select.mb-3(name='state' aria-label='.form-select-lg example' )
+                    - var n = 0
+                    each val in states
+                          option(value=n++ selected=(state === (n-1)) ) #{val.name}  
+            .col-4         
+                button.btn.btn-primary(type='submit') Set state

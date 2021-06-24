@@ -1,0 +1,30 @@
+extends layout
+
+
+block content
+	.container
+		.table-responsive
+			table.table
+				thead
+					tr
+						th.text-nowrap(scope='col') Value
+						each val, key in results
+							th.text-nowrap(scope='col') #{val.stateName}
+				tbody
+					tr
+						th(scope='col') URL
+						each val, key in results
+							td #{val.results.currentUrl}
+					tr
+						th(scope='col') iframes
+						each val, key in results
+							td.text-nowrap #{val.results.iframes}
+					tr
+						th(scope='col') HTTP status code
+						each val, key in results
+							td.text-nowrap #{val.results.httpStatusCode}
+
+
+
+
+

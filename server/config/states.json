@@ -1,0 +1,23 @@
+[
+    {
+        "name": "State 1",
+        "properties": {
+            "iframes": 0,
+            "httpStatusCode": 200
+        }
+    },
+    {
+        "name": "State 2",
+        "properties": {
+            "iframes": 1,
+            "httpStatusCode": 200
+        }
+    },
+    {
+        "name": "State 3",
+        "properties": {
+            "iframes": 10,
+            "httpStatusCode": 404
+        }
+    }
+]
