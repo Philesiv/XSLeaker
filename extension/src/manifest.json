@@ -1,6 +1,6 @@
 {
   "name": "XS-Leak Searcher",
-  "permissions": ["activeTab","declarativeContent","storage", "tabs", "*://*/*"],
+  "permissions": ["activeTab","declarativeContent","storage", "tabs", "*://*/*", "webRequest"],
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false

@@ -34,6 +34,7 @@
 -->
 <div class="container-fluid">
   <h3>XS-Leak Searcher</h3>
+
   <button class="btn btn-primary" type="button" id="btnActivate">Activate</button>
   <button class="btn btn-primary" type="button" id="btnDeactivate" disabled>Deactivate</button>
  <hr>
@@ -43,16 +44,17 @@
      <label for="txtStateName" class="col-form-label">State name</label>
   </div>
   <div class="col-auto">
-    <input type="text" class="form-control" id="txtStateName">
+    <input type="text" minlength="1" class="form-control" id="txtStateName">
   </div>
   <div class="col-auto">
-    <button type="submit" class="btn btn-primary">Set state name</button>
+    <button type="button" class="btn btn-primary" id="btnSetStateName">Set state name</button>
   </div>
 </div>
-  <div class="form-check form-switch">
+<div class="form-check form-switch">
   <input class="form-check-input" type="checkbox" id="switchMasterMode" checked>
   <label class="form-check-label" for="switchMasterMode">Master-Mode</label>
 </div>
+<button class="btn btn-primary" type="button" id="btnResults">Send Results</button>
 </fieldset>
 </div>
 

@@ -128,20 +128,26 @@ windowID.innerText = "windowID";
 let backgroundPort = chrome.runtime.connect({name: "popup-connection"});
 
 backgroundPort.onMessage.addListener((msg) => {
-  alert("Message received!" + msg);
+  console.log("background message received: "+ JSON.stringify(msg));
+  if(msg.action === "getStateName"){
+    document.getElementById('txtStateName').value = msg.value;
+  }
+  
 });
 
 
 function restore_settings() {
   chrome.storage.local.get({
     masterMode: false,
-    active: false
+    active: false,
+
   }, (items) => {
     document.getElementById('switchMasterMode').checked = items.masterMode;
     if (items.active){
       document.getElementById('extensionControl').disabled = false;
       document.getElementById('btnDeactivate').disabled = false;
       document.getElementById('btnActivate').disabled = true;
+      backgroundPort.postMessage({action: "getStateName"});
     }
 
 });
@@ -161,7 +167,12 @@ function activateExtension(){
   chrome.storage.local.set({
     active: true 
   });
-  backgroundPort.postMessage({action: "connect"});
+  backgroundPort.postMessage({action: "activate"});
+
+  // refresh page to get http responses
+  chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+    chrome.tabs.reload(tabs[0].id);
+  });
 }
 
 function deactivateExtension(){
@@ -170,15 +181,35 @@ function deactivateExtension(){
   document.getElementById('btnDeactivate').disabled = true;
   document.getElementById('btnActivate').disabled = false;
   document.getElementById('switchMasterMode').checked = false;
+  document.getElementById('txtStateName').value = "";
   // reset values
   toggleMasterMode();
   chrome.storage.local.set({
     active: false 
   });
-  backgroundPort.postMessage({action: "disconnect"});
+  backgroundPort.postMessage({action: "deactivate"});
+}
+
+// set State name
+// ToDo: Get Failure message if requirements not met
+function setStateName(){
+  let stateNameField = document.getElementById('txtStateName');
+  console.log(stateNameField.value);
+  if(stateNameField.value !== ""){
+    backgroundPort.postMessage({action: "setStateName", value: stateNameField.value});
+  }else{
+    console.log("Empty state name will be ignored");
+
+  }
+}
+
+function sendResults(){
+  backgroundPort.postMessage({action: "sendResults"});
 }
 
 document.addEventListener('DOMContentLoaded', restore_settings);
 document.getElementById('switchMasterMode').addEventListener('click', toggleMasterMode);
 document.getElementById('btnActivate').addEventListener('click', activateExtension);
 document.getElementById('btnDeactivate').addEventListener('click', deactivateExtension);
+document.getElementById('btnSetStateName').addEventListener('click', setStateName);
+document.getElementById('btnResults').addEventListener('click', sendResults);

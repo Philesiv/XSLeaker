@@ -19,7 +19,7 @@ window.onload = () => {
 // iframes.js 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-      if (request.type == "iframes")
+      if (request.action == "getresults")
         console.log("Iframes Count: " + frames.length.toString());
         sendResponse({iframes: frames.length.toString()});
         return true;
@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
   if ("masterMode" in changes) {
-    toggleMasterMode(changes.masterMode.newValue)
+    toggleMasterMode(changes.masterMode.newValue);
   }
 });
 
