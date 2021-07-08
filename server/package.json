@@ -4,8 +4,11 @@
   "description": "nodejs server for the xs-extension",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "watch": "nodemon ./app.js"
+    "start": "node start.js",
+    "watch": "nodemon ./start.js"
+  },
+  "nodemonConfig": {
+    "ignore": ["config/*.json"]
   },
   "author": "",
   "license": "ISC",

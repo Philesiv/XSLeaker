@@ -4,9 +4,31 @@ block test
     form(method="post")
         .row.mb-3 
             .col-8 
-                select.form-select.form-select.mb-3(name='state' aria-label='.form-select-lg example' )
+                select.form-select.form-select.mb-3(name='stateSelect' aria-label='.form-select-lg example' )
                     - var n = 0
                     each val in states
                           option(value=n++ selected=(state === (n-1)) ) #{val.name}  
-            .col-4         
+            .col-4
+                input(type='hidden' name='action' value='setState')        
                 button.btn.btn-primary(type='submit') Set state
+
+    if(state !== undefined )
+        hr
+        h4.mb-4 #{states[state].name} properties
+        form(method="post")
+            .row.gy-2.gx-3
+                .col-md-6
+                    label.form-label(for='iframes') Iframes
+                    input#iframes.form-control(type='number' name='iframes' data-toggle="tooltip" title="Set number of iframes" min="0" required value=states[state].properties.iframes)
+                .col-md-6
+                    label.form-label(for='httpStatusCode') HTTP status code
+                    input#httpStatusCode.form-control(type='number' name='httpStatusCode' data-toggle="tooltip" title="Set the HTTP status code" min="0" required value=states[state].properties.httpStatusCode)
+                .col-md-6
+                    .form-check
+                        input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
+                        label.form-check-label(for='redirect') Redirect
+
+                .col-12.mt-4
+                    input(type='hidden' name='action' value='setProperties')
+                    button.btn.btn-primary(type='submit') Save
+

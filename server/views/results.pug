@@ -11,18 +11,31 @@ block content
 						each val, key in results
 							th.text-nowrap(scope='col') #{val.stateName}
 				tbody
-					tr
+					tr(class={'bg-danger': differences.currentUrl === true})
 						th(scope='col') URL
 						each val, key in results
 							td #{val.results.currentUrl}
-					tr
+					tr(class={'bg-danger': differences.iframes === true})
 						th(scope='col') iframes
 						each val, key in results
 							td.text-nowrap #{val.results.iframes}
-					tr
+					tr(class={'bg-danger': differences.httpStatusCode === true})
 						th(scope='col') HTTP status code
 						each val, key in results
 							td.text-nowrap #{val.results.httpStatusCode}
+					tr(class={'bg-danger': differences.redirects === true})
+						th(scope='col') Redirect
+						each val, key in results
+							td.text-nowrap #{val.results.redirects.length}
+					- var headers = ['Content-Length', 'X-Frame-Options', 'Cross-Origin-Resource-Policy', 'X-Content-Type-Options', 'Content-Disposition', 'Content-Security-Policy', 'Cross-Origin-Opener-Policy'];
+					each header in headers
+						tr(class={'bg-danger': differences.headers[header] === true})
+							th.text-nowrap(scope='col') #{header}
+							each val, key in results
+								if(val.results.headers[header] === undefined)
+									td.text-nowrap -
+								else
+									td.text-nowrap #{val.results.headers[header]}
 
 
 

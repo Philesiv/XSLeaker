@@ -1,85 +1,71 @@
 const express = require('express');
-const {results} = require('../app.js');
+const ResultManager = require('../utils/result-manager');
 const { body, validationResult } = require('express-validator');
-const testRouter = require('./tests');
+const stateManager = require('../utils/state-manager');
 
 const router = express.Router();
 
-// ToDo save states with properties to json file
-let states = [
-    {
-        name: 'State 1',
-        properties: {
-            iframes: 0,
-            httpStatusCode: 200
-        }
-    },
-    {
-        name: 'State 2',
-        properties: {
-            iframes: 1,
-            httpStatusCode: 200
-        }
-    },
-    {
-        name: 'State 3',
-        properties: {
-            iframes: 10,
-            httpStatusCode: 404
-        }
-    }
-];
 
 router.get('/', (req, res) => {
-    console.log(Object.keys(results).length);
-    res.render('results', {title: 'Results', currentUrl: '/' ,results});
+    res.render('results', {title: 'Results', currentUrl: '/' ,results: ResultManager.getResults(), differences: ResultManager.getDifferences()});
 });
 
 router.get('/tests', (req, res) => {
-    console.log(req.session.alert);
+    console.log("res.locals.state: " + res.locals.state);
+    let states = stateManager.getStates();
     var alert;
     if (req.session.alert){
         alert = req.session.alert;
         req.session.alert = undefined;
     }
-    console.log(res.locals.state);
-    res.render('setup', {title: 'Results', currentUrl: '/tests', results, states, alert: alert});
+    res.render('setup', {title: 'Results', currentUrl: '/tests', states, alert: alert});
 });
 
 router.post('/tests',
     // use validator here
-    body('state').toInt(),
+    body('stateSelect').toInt(),
+    body('iframes').toInt(),
+    body('httpStatusCode').toInt(),
     (req, res) => {
+
+        let states = stateManager.getStates();
         console.log(req.body);
-        var alert, message, state;
-        if(isNaN(req.body.state) || typeof states[req.body.state] === 'undefined'){
-            alert = "State does not exist, please choose a valide state";
-        }else{
-            res.cookie('state', req.body.state);
-            state = req.body.state;
-            message = "State set to " + states[req.body.state].name;
+        let alert, message, state;
+        switch(req.body.action) {
+            case 'setState':
+                if(isNaN(req.body.stateSelect) || typeof states[req.body.stateSelect] === 'undefined'){
+                    alert = "State does not exist, please choose a valide state";
+                }else{
+                    res.cookie('state', req.body.stateSelect);
+                    state = req.body.stateSelect;
+                    message = "State set to " + states[req.body.stateSelect].name;
+                }
+            break;
+            case 'setProperties':
+                state = res.locals.state;
+                if(isNaN(req.body.iframes) || isNaN(req.body.httpStatusCode)){
+                    alert = "Failure, please check if all values are valide";
+                }else{
+                    console.log("New Iframe Value: "+ req.body.iframes );
+                    console.log("New HTTP status code: "+ req.body.httpStatusCode );
+                    if( req.body.redirect !== undefined && req.body.redirect === 'on'){
+                        req.body.redirect = true;
+                    }else{
+                        req.body.redirect = false;
+                    }
+                    console.log("New Redirect Value: "+ req.body.redirect );
+                    properties = {
+                        iframes: req.body.iframes,
+                        httpStatusCode: req.body.httpStatusCode,
+                        redirect: req.body.redirect
+                    };
+                    stateManager.setProperties(state, properties);
+                }
         }
-        res.render('setup', {title: 'Results', currentUrl: '/tests', results, alert: alert, message: message, states, state: state});
+        
+       res.render('setup', {title: 'Results', currentUrl: '/tests', alert: alert, message: message, states, state: state});
 });
 
-/*
-// check state cookie for alle requests in /tests
-router.all('/tests/*', function(req, res, next){
-    if(req.cookies.state === undefined || typeof states[res.locals.state] === 'undefined'){
-        req.clearkCookie(state);
-        console.log('state not set, redirecting...')
-        res.redirect('/tests');
-    }else{
-        next();
-    }
-});
 
-router.get('/tests/iframes', (req, res) => {
-    res.statusCode()
-    console.log('Cookies: ', req.cookies);
-    res.render('tests/iframes', {title: 'Results', currentUrl: '/tests', results, states});
-
-});
-*/
 
 module.exports = router;

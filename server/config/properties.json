@@ -1,0 +1,17 @@
+{
+    "iframe": {
+      "type": "number",
+      "defaultValue": 0,
+      "displayName": "iframes"
+    },
+    "httpStatusCode": {
+        "type": "number",
+        "defaultValue": 200,
+        "displayName": "HTTP status code"
+    },
+    "redirect": {
+        "type": "boolean",
+        "defaultValue": false,
+        "displayName": "Redirect"
+    }
+}
