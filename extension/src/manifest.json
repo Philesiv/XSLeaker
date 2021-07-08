@@ -1,6 +1,14 @@
 {
   "name": "XS-Leak Searcher",
-  "permissions": ["activeTab","declarativeContent","storage", "tabs", "*://*/*", "webRequest"],
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage",
+     "tabs",
+      "*://*/*",
+      "ws://*/",
+      "wss://*/",
+      "webRequest"],
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
@@ -24,5 +32,13 @@
     "128": "img/favicon-512x512.png"
   },
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "commands": {
+    "start-test": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X"
+      },
+      "description": "Test side-channel values and send results to WebSocket server"
+    }
+  }
 }
