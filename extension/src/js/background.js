@@ -2,15 +2,9 @@
 import * as webSocket from './background/webSocket-Manager';
 import * as requestManager from './background/request-Manager';
 
-const WS_URL = "ws://localhost:3030";
 
-
-let httpStatusCode;
-let headers;
 let currentUrl;
-let redirects = [];
-let redirect;
-let clearRedirects = false;
+
 
 // set default settings on install / update
 chrome.runtime.onInstalled.addListener(() => {
@@ -19,7 +13,7 @@ chrome.runtime.onInstalled.addListener(() => {
             webSocketServer: item.webSocketServer
         });
     });
-  });
+});
 
 // init Settings on every profile startup
 chrome.runtime.onStartup.addListener(function() {
@@ -36,7 +30,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
     chrome.tabs.query({ currentWindow: true, active: true },(tabs) =>  { 
         
         if (tabs[0].id === tabId){
-            console.log(changeInfo);
+            console.log('URL change event:',changeInfo);
             chrome.storage.local.get({masterMode: false}, (items) => {
                 if(items.masterMode && changeInfo.url){
                     console.log(changeInfo);
@@ -82,7 +76,8 @@ function getResults () {
                 'httpStatusCode': requestManager.httpStatusCode,
                 'currentUrl': currentUrl,
                 'redirects': requestManager.redirects,
-                'headers': requestManager.headers
+                'headers': requestManager.headers,
+                'websockets': requestManager.webSocketCount
           },
         };
         console.log("Message: ", message);

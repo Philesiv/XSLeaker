@@ -4,49 +4,58 @@ let headers;
 let redirects = [];
 let redirect;
 let clearRedirects = false;
+let completedRequest = false;
+let webSocketCount = 0;
 
-// ToDo -> den richtigen statuscode abchecken. Wäre bei redirects falsch!
-// Idee: so lange request speichern bis ein normaler request kommt. Dann beim nächsten mal zurücksetzen
-// redirect immer noch sehr komisch geloest. Bessere idee? 
+// delete me!!
 function requestListener(details){
-    redirect = false;
-    headers = {};
-    // clear redirects if last Request was not a redirect
-    if(clearRedirects){
-        redirects = [];
-        clearRedirects = false;
-    }
-    // check headers here
-    for (const header of details.responseHeaders){
-        headers[header.name] = header.value;
-        if(header.name === "Location"){
-            redirects.push(details);
-            console.log("Redirect!!!");
-            redirect = true;
-        }
-
-    }
-    if (redirect !== true){
-        httpStatusCode = details.statusCode;
-        //headers = details.responseHeaders;
-        console.log("Redirects: ", redirects);
-        clearRedirects = true;
-    }
+    console.log('RequestListener');
     console.log(details);
-    //console.log(details.responseHeaders);
    
 }
 
+function completedListener(details){
+    headers = {};
+    console.log("onCompleted data:", details);
+    httpStatusCode = details.statusCode;
+    // add headers as keys for easy access
+    for (const header of details.responseHeaders){
+        headers[header.name.toLowerCase()] = header.value;
+    }
+    completedRequest = true;
+    webSocketCount = 0;
+    console.log(webSocketCount);
+}
+
+function redirectListener(details){
+    console.log("Redirecte happend!");
+    console.log("Redirect data:", details);
+    if(completedRequest){
+        redirects = [];
+        completedRequest = false;
+    }
+    redirects.push(details);
+}
+
+// counts the established WebSocket connections for the site. Does not recognize disconnects!  
+function webSocketListener(details){
+    console.log("WebSocket connection!");
+    console.log("WebSocket data:", details);
+    webSocketCount++;
+    console.log("WebSocket count:", webSocketCount);
+}
+
 function addRequestListener(){
-    chrome.webRequest.onHeadersReceived.addListener(requestListener, {urls: ["<all_urls>"], types: ["main_frame"]}, ["responseHeaders"]);
-    chrome.webRequest.onHeadersReceived.addListener((details) => {
-        console.log("WebSocket!!!!!");
-        console.log(details);
-    }, {urls: ["<all_urls>"], types: ["websocket"]}, ["responseHeaders"]);
+    //chrome.webRequest.onHeadersReceived.addListener(requestListener, {urls: ["<all_urls>"], types: ["main_frame"]}, ["responseHeaders"]);
+    chrome.webRequest.onHeadersReceived.addListener(webSocketListener, {urls: ["<all_urls>"], types: ["websocket"]}, ["responseHeaders"]);
+    chrome.webRequest.onBeforeRedirect.addListener(redirectListener, {urls: ["<all_urls>"], types: ["main_frame"]}, ["responseHeaders"]);
+    chrome.webRequest.onCompleted.addListener(completedListener, {urls: ["*://*/*"], types: ["main_frame"]}, ["responseHeaders"]);
 }
 
 function removeRequestListener(){
-    chrome.webRequest.onHeadersReceived.removeListener(requestListener);
+    chrome.webRequest.onHeadersReceived.removeListener(webSocketListener);
+    chrome.webRequest.onBeforeRedirect.removeListener(redirectListener);
+    chrome.webRequest.onCompleted.removeListener(completedListener);
     httpStatusCode = null;
 }
 
@@ -55,5 +64,6 @@ export{
     removeRequestListener,
     httpStatusCode,
     headers,
-    redirects
+    redirects,
+    webSocketCount
 };
