@@ -6,3 +6,13 @@ block test
     while n < states[state].properties.iframes
         - n++;
         iframe.border(width='100', height='100', src='')
+    - n = 0;
+    
+    while n < states[state].properties.websockets
+        script.
+            if(ws === undefined){
+                console.log("undefiened!")
+                var ws = [];
+            }
+            ws.push(new WebSocket('wss://echo.websocket.org'));
+        - n++;

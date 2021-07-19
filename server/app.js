@@ -25,7 +25,7 @@ app.use(express.static('public'));
 // state cookie middleware -> deletes uncorrect state-cookies.
 app.use(function (req, res, next) {
     if (req.cookies.state !== undefined){
-        let states = stateLoader.getStates();
+        let states = stateManager.getStates();
         // delete cookie if state is not defined
         let state = parseInt(req.cookies.state);
         if (typeof states[state] === 'undefined'){

@@ -26,6 +26,7 @@ router.post('/tests',
     body('stateSelect').toInt(),
     body('iframes').toInt(),
     body('httpStatusCode').toInt(),
+    body('websockets').toInt(),
     (req, res) => {
 
         let states = stateManager.getStates();
@@ -46,8 +47,9 @@ router.post('/tests',
                 if(isNaN(req.body.iframes) || isNaN(req.body.httpStatusCode)){
                     alert = "Failure, please check if all values are valide";
                 }else{
-                    console.log("New Iframe Value: "+ req.body.iframes );
+                    console.log("New Iframe value: "+ req.body.iframes );
                     console.log("New HTTP status code: "+ req.body.httpStatusCode );
+                    console.log("New WebSocket value: "+ req.body.websockets );
                     if( req.body.redirect !== undefined && req.body.redirect === 'on'){
                         req.body.redirect = true;
                     }else{
@@ -57,7 +59,8 @@ router.post('/tests',
                     properties = {
                         iframes: req.body.iframes,
                         httpStatusCode: req.body.httpStatusCode,
-                        redirect: req.body.redirect
+                        redirect: req.body.redirect,
+                        websockets: req.body.websockets
                     };
                     stateManager.setProperties(state, properties);
                 }

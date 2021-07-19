@@ -24,6 +24,9 @@ block test
                     label.form-label(for='httpStatusCode') HTTP status code
                     input#httpStatusCode.form-control(type='number' name='httpStatusCode' data-toggle="tooltip" title="Set the HTTP status code" min="0" required value=states[state].properties.httpStatusCode)
                 .col-md-6
+                    label.form-label(for='httpStatusCode') WebSockets
+                    input#httpStatusCode.form-control(type='number' name='websockets' data-toggle="tooltip" title="Set number of WebSockets" min="0" required value=states[state].properties.websockets)
+                .col-md-6
                     .form-check
                         input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
                         label.form-check-label(for='redirect') Redirect

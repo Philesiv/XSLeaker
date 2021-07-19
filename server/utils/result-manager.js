@@ -49,7 +49,7 @@ function getDifferences(){
                         }
                         differences[property][header] = (results[states[0]].results[property][header] !== results[states[i]].results[property][header]);
                         //console.log(header);
-                        if(header === 'Content-Length'){
+                        if(header === 'content-length'){
                             console.log("Content-Length Found!!!!");
                         }
                     }

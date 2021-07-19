@@ -27,7 +27,11 @@ block content
 						th(scope='col') Redirect
 						each val, key in results
 							td.text-nowrap #{val.results.redirects.length}
-					- var headers = ['Content-Length', 'X-Frame-Options', 'Cross-Origin-Resource-Policy', 'X-Content-Type-Options', 'Content-Disposition', 'Content-Security-Policy', 'Cross-Origin-Opener-Policy'];
+					tr(class={'bg-danger': differences.websockets === true})
+						th(scope='col') WebSockets
+						each val, key in results
+							td.text-nowrap #{val.results.websockets} 
+					- var headers = ['content-length', 'x-frame-options', 'cross-origin-resource-policy', 'x-content-type-options', 'content-disposition', 'content-security-policy', 'cross-origin-opener-policy'];
 					each header in headers
 						tr(class={'bg-danger': differences.headers[header] === true})
 							th.text-nowrap(scope='col') #{header}
