@@ -2,9 +2,10 @@
   {
     "name": "State 1",
     "properties": {
-      "iframes": 0,
+      "iframes": 2,
       "httpStatusCode": 200,
-      "redirect": false
+      "redirect": false,
+      "websockets": 0
     }
   },
   {
@@ -12,7 +13,8 @@
     "properties": {
       "iframes": 3,
       "httpStatusCode": 404,
-      "redirect": false
+      "redirect": false,
+      "websockets": 5
     }
   },
   {
@@ -20,7 +22,8 @@
     "properties": {
       "iframes": 5,
       "httpStatusCode": 500,
-      "redirect": true
+      "redirect": true,
+      "websockets": 5
     }
   }
 ]
