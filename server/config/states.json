@@ -5,7 +5,7 @@
       "iframes": 2,
       "httpStatusCode": 200,
       "redirect": false,
-      "websockets": 0
+      "websockets": 1
     }
   },
   {

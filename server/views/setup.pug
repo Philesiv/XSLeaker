@@ -17,16 +17,35 @@ block test
         h4.mb-4 #{states[state].name} properties
         form(method="post")
             .row.gy-2.gx-3
-                .col-md-6
+                .col-md-4
                     label.form-label(for='iframes') Iframes
                     input#iframes.form-control(type='number' name='iframes' data-toggle="tooltip" title="Set number of iframes" min="0" required value=states[state].properties.iframes)
-                .col-md-6
+                .col-md-4
                     label.form-label(for='httpStatusCode') HTTP status code
                     input#httpStatusCode.form-control(type='number' name='httpStatusCode' data-toggle="tooltip" title="Set the HTTP status code" min="0" required value=states[state].properties.httpStatusCode)
-                .col-md-6
+                .col-md-4
                     label.form-label(for='httpStatusCode') WebSockets
                     input#httpStatusCode.form-control(type='number' name='websockets' data-toggle="tooltip" title="Set number of WebSockets" min="0" required value=states[state].properties.websockets)
-                .col-md-6
+                .col-md-4 
+                    label.form-label(for='corp') CORP-Header
+                    select#corp.form-select(name='corp') 
+                        option(value='') -
+                        option(value='same-site') same-site
+                        option(value='same-origin') same-origin
+                        option(value='cross-origin') cross-origin
+                .col-md-4 
+                    label.form-label(for='xContentType') X-Content-Type Header
+                    select#xContentType.form-select(name='xContentType') 
+                        option(value='') -
+                        option(value='nosniff') nosniff
+                .col-md-4 
+                    label.form-label(for='coop') COOP-Header
+                    select#coop.form-select(name='coop') 
+                        option(value='') -
+                        option(value='unsafe-none') unsafe-none
+                        option(value='same-origin-allow-popups') same-origin-allow-popups
+                        option(value='same-origin') same-origin
+                .col-md-4
                     .form-check
                         input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
                         label.form-check-label(for='redirect') Redirect

@@ -2,12 +2,35 @@ const express = require('express');
 const ResultManager = require('../utils/result-manager');
 const { body, validationResult } = require('express-validator');
 const stateManager = require('../utils/state-manager');
-
+const dbManager = require('../utils/db-manager');
 const router = express.Router();
 
 
 router.get('/', (req, res) => {
     res.render('results', {title: 'Results', currentUrl: '/' ,results: ResultManager.getResults(), differences: ResultManager.getDifferences()});
+});
+
+router.get('/history', (req, res) => {
+    console.log('Params:', req.query);
+    let urlfilter = "";
+    if(req.query.urlfilter){
+        urlfilter = req.query.urlfilter.trim();
+    }
+    let differences = false;
+    if(req.query.differences && req.query.differences === 'on'){
+        console.log("differences filter on!");
+        differences = true;
+    }
+
+    dbManager.getTests(urlfilter, differences,(rows)=>{
+        // convert date to iso string
+        for(let index = 0, len = rows.length; index < len; index++){
+            rows[index].formatedDate = new Date(rows[index].date*1000).toISOString();
+        }
+        //console.log(rows);
+        res.render('history', {title: 'Test History', currentUrl: '/history' , rows: rows, urlfilter: urlfilter, differences: differences});
+    });
+    
 });
 
 router.get('/tests', (req, res) => {
@@ -18,7 +41,7 @@ router.get('/tests', (req, res) => {
         alert = req.session.alert;
         req.session.alert = undefined;
     }
-    res.render('setup', {title: 'Results', currentUrl: '/tests', states, alert: alert});
+    res.render('setup', {title: 'Test', currentUrl: '/tests', states, alert: alert});
 });
 
 router.post('/tests',

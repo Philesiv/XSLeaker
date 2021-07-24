@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
+const resultManager = require('./utils/result-manager');
 const ResultManager = require('./utils/result-manager');
-
+//const DBManager = require('./utils/db-manager');
 
 // adds [WebSocket] on log messages
 function log(value){
@@ -12,16 +13,27 @@ log("Server started");
 
 
 let connectionCount = 0;
-
+let masterActive = false;
 
 
 socketServer.on('connection', (socketClient) => {
     log('connected!');
     log('Number of clients: ' + socketServer.clients.size);
+    // set default properties for each connection
     socketClient.stateName = 'state '  + (++connectionCount);
     socketClient.id = connectionCount;
+    socketClient.masterMode = false;
     log('Set state name to: ' + socketClient.stateName );
-    socketClient.send(JSON.stringify({action: "getStateName", value: socketClient.stateName }))
+    socketClient.send(JSON.stringify({action: "getStateName", value: socketClient.stateName }));
+    // hasMaster?
+    if (masterActive) {
+        let msg = {
+            'action': 'hasMaster',
+            'value': true
+        }; 
+        socketClient.send(JSON.stringify(msg));
+    }
+
     socketClient.on('message', (message) => {
         jsonMessage = JSON.parse(message);
         log('Message received: ' + JSON.stringify(jsonMessage, null, 2));
@@ -32,18 +44,56 @@ socketServer.on('connection', (socketClient) => {
         else if (jsonMessage.action === "setResults") {
             ResultManager.setResults(jsonMessage.values, socketClient.stateName);
         }
-        else if (jsonMessage.action === "changeSite" || jsonMessage.action === 'startTest') {
-            //broadcast changeSite event
+        else if (jsonMessage.action === "setStateName"){
+            socketClient.stateName = jsonMessage.value;
+            log("New state name: " + socketClient.stateName);
+            
+        }
+        else if (jsonMessage.action === "setMasterMode"){
+            if (jsonMessage.value === true){
+                socketClient.masterMode = true;
+                masterActive = true;
+                let msg = {
+                    'action': 'hasMaster',
+                    'value': true
+                };
+                socketServer.clients.forEach((client) => {
+                    if (client !== socketClient && client.readyState === WebSocket.OPEN){
+                        client.masterMode = false;
+                        client.send(JSON.stringify(msg));
+                    }
+                });
+            }else{
+                socketClient.masterMode = false; 
+                masterActive = false;
+                let msg = {
+                    'action': 'hasMaster',
+                    'value': false
+                };
+                socketServer.clients.forEach((client) => {
+                    if (client !== socketClient && client.readyState === WebSocket.OPEN){
+                        client.send(JSON.stringify(msg));
+                    }
+                });
+            }
+        }
+        else if (socketClient.masterMode === true && jsonMessage.action === "changeSite"){
+            //broadcast event
             socketServer.clients.forEach((client) => {
                 if (client !== socketClient && client.readyState === WebSocket.OPEN){
                     client.send(message);
                 }
             });
         }
-        else if (jsonMessage.action === "setStateName"){
-            socketClient.stateName = jsonMessage.value;
-            log("New state name: " + socketClient.stateName);
-            
+        else if (socketClient.masterMode === true && jsonMessage.action === 'startTest'){
+            // create new test entry:
+            resultManager.createNewTest(jsonMessage.url);
+            //broadcast event
+            socketServer.clients.forEach((client) => {
+                if (client !== socketClient && client.readyState === WebSocket.OPEN){
+                    client.send(message);
+                }
+            });
         }
     });
 
@@ -52,6 +102,18 @@ socketServer.on('connection', (socketClient) => {
     socketClient.on('close', (socketClient) => {
         log('Connection closed');
         log('Number of clients: ', socketServer.clients.size);
-
+        if(socketClient.masterMode === true){
+            socketClient.masterMode = false;
+            masterActive = false;
+            let msg = {
+                'action': 'hasMaster',
+                'value': false
+            };
+            socketServer.clients.forEach((client) => {
+                if (client !== socketClient && client.readyState === WebSocket.OPEN){
+                    client.send(JSON.stringify(msg));
+                }
+            });
+        }
     });
 });

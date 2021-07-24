@@ -1,7 +1,10 @@
 // Manages the results
 
-let results = {};
+const { urlencoded } = require("express");
+const DBManager = require('./db-manager'); 
 
+let results = {};
+let activeTestID; 
 
 function setResults(result, stateId){
     console.log(result);
@@ -68,8 +71,20 @@ function getDifferences(){
     return differences;
 }
 
+// ToDo differences des vorherigen tests setzen
+function createNewTest(url){
+    if(activeTestID !== undefined){
+        //setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist.    
+    }
+    DBManager.createTest(url, (id) => {
+        activeTestID = id;
+        console.log("New active ID:", activeTestID);
+    });
+}
+
 module.exports = {
     setResults: setResults,
     getResults: getResults,
-    getDifferences: getDifferences
+    getDifferences: getDifferences,
+    createNewTest: createNewTest
 };

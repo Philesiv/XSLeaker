@@ -1,0 +1,35 @@
+extends layout
+
+
+block content
+    .container.mt-4
+        form.mb-3
+          .row.mb-2
+            label.col-sm-1.col-form-label(for='urlfilter') Url:
+            .col-sm-4
+              input#urlfilter.form-control(type='text' name='urlfilter' value=urlfilter)
+            .col-sm-3
+              .form-check.align-baseline
+                input#differences.form-check-input(type='checkbox' name='differences' checked=(differences))
+                label.form-check-label(for='differences')
+                  | Only show Results with differences
+            .col-sm-2
+                button.btn.btn-primary(type='submit') Search
+        hr
+        table.table
+          thead
+            tr
+              th(scope='col') ID
+              th(scope='col') Url
+              th(scope='col') Date
+              th(scope='col') Differences
+          tbody
+            each row in rows      
+                tr
+                    th(scope='row') #{row.id}
+                    td #{row.url}
+                    td #{row.formatedDate}
+                    td #{row.differences}
+
+
+

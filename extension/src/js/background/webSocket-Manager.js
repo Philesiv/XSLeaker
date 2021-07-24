@@ -1,6 +1,6 @@
 let ws;
 let stateName = "";
-
+import {getResults} from '../background';
 import { popupPort } from "./message-Manager";
 
 // connects to WebSocket-server and adds listener
@@ -18,6 +18,7 @@ function connectWebsocket(){
             ws.onclose = () => {
                 console.log('Connection closed!');
                 chrome.storage.local.set({
+                    masterMode: false,
                     active: false
                 });
                 chrome.browserAction.setIcon({path:{
@@ -26,6 +27,7 @@ function connectWebsocket(){
             };
             ws.onmessage = (event) => {
                 const message = JSON.parse(event.data);
+                console.log("WSMessage received:", message);
                 if (message.action === "changeSite"){
                     chrome.tabs.query({currentWindow: true, active:true}, (tab) => {
                         chrome.tabs.update(tab.id, {url: message.url});
@@ -33,9 +35,21 @@ function connectWebsocket(){
                 }else if (message.action === "startTest"){
                     getResults();
                 }else if(message.action === "getStateName"){
-                    console.log("Statename");
                     popupPort.postMessage({action: "getStateName", value: message.value});
                     stateName = message.value;
+                }else if(message.action === "hasMaster"){
+                    if (message.value === true){
+                        // set replica mode and disable master mode:
+                        chrome.storage.local.set({
+                            replicaMode: true,
+                            masterMode: false
+                        });
+                    }else{
+                        chrome.storage.local.set({
+                            replicaMode: false,
+                        });
+                    }
+
                 }
             };
         });
@@ -68,5 +82,7 @@ function getStateName(){
 function setStateName(value){
     stateName = value;
 }
+
+
 
 export {connectWebsocket, disconnectWebsocket, sendWebsocketMessage, getStateName, setStateName};

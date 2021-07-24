@@ -19,6 +19,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onStartup.addListener(function() {
     chrome.storage.local.set({
         masterMode: false,
+        replicaMode: false,
         active: false
     });
     console.log('open');
@@ -49,23 +50,48 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
     });          
 });
 
-// send URL when Master-Mode is activated by user 
+
 chrome.storage.onChanged.addListener(function(changes, namespace) {
-    if ("masterMode" in changes && changes.masterMode.newValue === true) {
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            let activeTab = tabs[0];
+    if ("masterMode" in changes) {
+        if(changes.masterMode.newValue === true){
             let message = {
-                'action': 'changeSite',
-                'url': activeTab.url
+                'action': 'setMasterMode',
+                'value': true
             };
             webSocket.sendWebsocketMessage(message);
-        });
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                let activeTab = tabs[0];
+                message = {
+                    'action': 'changeSite',
+                    'url': activeTab.url
+                };
+                webSocket.sendWebsocketMessage(message);
+            });
+        }else{
+            let message = {
+                'action': 'setMasterMode',
+                'value': false
+            };
+            webSocket.sendWebsocketMessage(message);
+        }
     }
   });
 
 
 
 function getResults () {
+    //start testing on other windows if Master-Mode is activated
+    chrome.storage.local.get({masterMode: false}, (items) => {
+    console.log(items.masterMode);
+    if(items.masterMode){
+        let message = {
+            'action': 'startTest',
+            'url': currentUrl
+        };
+        console.log('startTest: ', message);
+        webSocket.sendWebsocketMessage(message);
+        }
+    });
     //get iframe count from main window
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, {action: "getresults"}, function(response) {
@@ -82,16 +108,7 @@ function getResults () {
         };
         console.log("Message: ", message);
         webSocket.sendWebsocketMessage(message);
-        //start testing on other windows if Master-Mode is activated
-        chrome.storage.local.get({masterMode: false}, (items) => {
-            console.log(items.masterMode);
-            if(items.masterMode){
-                message = {
-                    'action': 'startTest'
-                };
-                webSocket.sendWebsocketMessage(message);
-            }
-        });
+
       });
     });
 }

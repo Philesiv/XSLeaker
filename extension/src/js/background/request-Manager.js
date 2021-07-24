@@ -7,12 +7,6 @@ let clearRedirects = false;
 let completedRequest = false;
 let webSocketCount = 0;
 
-// delete me!!
-function requestListener(details){
-    console.log('RequestListener');
-    console.log(details);
-   
-}
 
 function completedListener(details){
     headers = {};

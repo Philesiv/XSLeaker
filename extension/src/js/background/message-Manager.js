@@ -5,6 +5,7 @@ import {addRequestListener, removeRequestListener} from './request-Manager';
 
 chrome.runtime.onConnect.addListener((port) => {
     if(port.name === "popup-connection"){
+        
         popupPort = port;
         //connectToWebsocket();
         popupPort.onMessage.addListener((msg) => {
