@@ -1,3 +1,5 @@
+import * as idCatcher from './content/id-catcher';
+
 // if Master-Mode is active create a red border
 function toggleMasterMode(active){
   if(active === true){
@@ -16,12 +18,12 @@ window.onload = () => {
 
 
 
-// iframes.js 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.action == "getresults")
         console.log("Iframes Count: " + frames.length.toString());
-        sendResponse({iframes: frames.length.toString()});
+        const ids = idCatcher.getIds();
+        sendResponse({iframes: frames.length.toString(), ids: ids});
         return true;
 });
 

@@ -27,6 +27,10 @@
 					th(scope='col') WebSockets
 					each result in results
 						td.text-nowrap #{result.websockets}
+				tr(class={'bg-danger': differences.ids === true})
+					th(scope='col') ids
+					each result in results
+						td.text-nowrap #{result.ids}
 				tr(class={'bg-danger': differences.content_length === true})
 					th(scope='col') content-length
 					each result in results

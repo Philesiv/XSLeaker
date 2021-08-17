@@ -39,6 +39,9 @@ router.get('/history', (req, res) => {
 router.get('/history/:testid', (req, res) => {
   console.log('Params:', req.params.testid);
   dbManager.getStates(req.params.testid, (rows) => {
+    for (let index = 0, len = rows.length; index < len; index++) {
+      rows[index].ids = JSON.parse(rows[index].ids);
+    }
     console.log('Found', rows.length, 'states');
     res.render('testresults', {
       title: 'Results', currentUrl: '/', results: rows, differences: ResultManager.getDBDifferences(rows),

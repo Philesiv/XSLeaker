@@ -90,7 +90,8 @@ function getResults () {
                 'currentUrl': tabs[0].url,
                 'redirects': requestManager.redirects.length,
                 'headers': requestManager.headers,
-                'websockets': requestManager.webSocketCount
+                'websockets': requestManager.webSocketCount,
+                'ids': response.ids
           },
         };
         chrome.storage.local.get({masterMode: false}, (items) => {

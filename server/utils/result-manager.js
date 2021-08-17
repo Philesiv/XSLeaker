@@ -6,14 +6,55 @@ const results = {};
 let activeTestID;
 const usedHeaders = ['content-length', 'x-frame-options', 'x-content-type-options', 'cross-origin-opener-policy', 'cross-origin-resource-policy', 'content-security-policy', 'content-disposition'];
 
+// check ids, returns true if differences found
+function diffIDs(ids1, ids2) {
+  if (ids1.length !== ids2.length) {
+    return true;
+  }
+  if (ids1.length === 0 && ids2.length === 0) {
+    return false;
+  }
+  const checker = (arr1, arr2) => arr2.every((v) => arr1.includes(v));
+  return !checker(ids1, ids2);
+}
+
+
+function getDifferences() {
+  console.log(results);
+  const differences = { };
+  if (Object.keys(results).length > 0) {
+    const states = Object.getOwnPropertyNames(results);
+    const properties = Object.getOwnPropertyNames(results[states[0]].results);
+    console.log('States: ', states);
+    console.log('Props: ', properties);
+    for (const property of properties) {
+      for (let i = 1; i < states.length; i++) {
+        // check if differences found already
+        if (differences[property] === true) {
+          continue;
+        } else if (property === 'ids') {
+          differences[property] = diffIDs(results[states[0]].results.ids,
+                                          results[states[i]].results.ids);
+        } else {
+          differences[property] = (results[states[0]].results[property] !== results[states[i]].results[property]);
+        }
+      }
+    }
+  }
+  return differences;
+}
+
+
+
 function setResults(result, stateId) {
   // normalize the results:
   // let headers = result.headers;
   // delete result.headers;
   const { headers, ...normResult } = result;
-  for ( const header of usedHeaders) {
+  for (const header of usedHeaders) {
     normResult[header] = headers[header];
   }
+
   results[stateId] = {
     stateName: stateId,
     results: normResult,
@@ -39,28 +80,6 @@ function getResults() {
   return results;
 }
 
-function getDifferences() {
-  console.log(results);
-  const differences = { };
-  if (Object.keys(results).length > 0) {
-    const states = Object.getOwnPropertyNames(results);
-    const properties = Object.getOwnPropertyNames(results[states[0]].results);
-    console.log('States: ', states);
-    console.log('Props: ', properties);
-    for (const property of properties) {
-      for (let i = 1; i < states.length; i++) {
-        // check if differences found already
-        if (differences[property] === true) {
-          continue;
-        } else {
-          differences[property] = (results[states[0]].results[property] !== results[states[i]].results[property]);
-        }
-      }
-    }
-  }
-  return differences;
-}
-
 function getDBDifferences(dbResults) {
   const differences = {};
   const properties = Object.getOwnPropertyNames(dbResults[0]);
@@ -70,7 +89,11 @@ function getDBDifferences(dbResults) {
     if (property !== 'id' || property !== 'test_id') {
       for (let i = 1; i < dbResults.length; i++) {
         if (differences[property] !== true) {
-          differences[property] = (dbResults[0][property] !== dbResults[i][property]);
+          if (property === 'ids') {
+            differences[property] = diffIDs(dbResults[0].ids, dbResults[i].ids);
+          } else {
+            differences[property] = (dbResults[0][property] !== dbResults[i][property]);
+          }
         }
       }
     }

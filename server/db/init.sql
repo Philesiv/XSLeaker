@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS states (
    coop TEXT,
    csp TEXT,
    content_disposition TEXT,
+   ids TEXT,
    FOREIGN KEY (test_id)
         REFERENCES tests (id) 
 );

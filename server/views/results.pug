@@ -31,6 +31,13 @@ block content
 						th(scope='col') WebSockets
 						each val, key in results
 							td.text-nowrap #{val.results.websockets} 
+					tr(class={'bg-danger': differences.ids === true})
+						th(scope='col') Ids
+						each val, key in results
+							if(val.results.ids.length === 0)
+								td.text-nowrap -
+							else 
+								td #{val.results.ids}  
 					- var headers = ['content-length', 'x-frame-options', 'cross-origin-resource-policy', 'x-content-type-options', 'content-disposition', 'content-security-policy', 'cross-origin-opener-policy'];
 					each header in headers
 						tr(class={'bg-danger': differences[header] === true})
@@ -39,7 +46,7 @@ block content
 								if(val.results[header] === undefined)
 									td.text-nowrap -
 								else
-									td.text-nowrap #{val.results[header]}
+									td #{val.results[header]}
 
 
 

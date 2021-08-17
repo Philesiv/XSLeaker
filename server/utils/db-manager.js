@@ -115,24 +115,26 @@ function setState(result, stateName, activeTestID) {
         corp,
         coop,
         csp,
-        content_disposition)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        content_disposition,
+        ids)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
   const params = [
-            activeTestID,
-            stateName,
-            result.currentUrl,
-            result.iframes,
-            result.httpStatusCode,
-            result.redirects,
-            result.websockets,
-            result["content-length"],
-            result["x-frame-options"],
-            result["x-content-type-options"],
-            result["cross-origin-resource-policy"],
-            result["cross-origin-opener-policy"],
-            result["content-security-policy"],
-            result["content-disposition"]
-          ];
+    activeTestID,
+    stateName,
+    result.currentUrl,
+    result.iframes,
+    result.httpStatusCode,
+    result.redirects,
+    result.websockets,
+    result['content-length'],
+    result['x-frame-options'],
+    result['x-content-type-options'],
+    result['cross-origin-resource-policy'],
+    result['cross-origin-opener-policy'],
+    result['content-security-policy'],
+    result['content-disposition'],
+    JSON.stringify(result.ids),
+  ];
   db.run(sql, params, (err) => {
     if (err) {
       throw err;
