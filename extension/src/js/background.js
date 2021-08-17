@@ -80,19 +80,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 
 
 function getResults () {
-    //start testing on other windows if Master-Mode is activated
-    chrome.storage.local.get({masterMode: false}, (items) => {
-    console.log(items.masterMode);
-    if(items.masterMode){
-        let message = {
-            'action': 'startTest',
-            'url': currentUrl
-        };
-        console.log('startTest: ', message);
-        webSocket.sendWebsocketMessage(message);
-        }
-    });
-    //get iframe count from main window
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, {action: "getresults"}, function(response) {
         let message = { 
@@ -100,14 +87,21 @@ function getResults () {
           'values': {
                 'iframes': response.iframes,
                 'httpStatusCode': requestManager.httpStatusCode,
-                'currentUrl': currentUrl,
-                'redirects': requestManager.redirects,
+                'currentUrl': tabs[0].url,
+                'redirects': requestManager.redirects.length,
                 'headers': requestManager.headers,
                 'websockets': requestManager.webSocketCount
           },
         };
-        console.log("Message: ", message);
-        webSocket.sendWebsocketMessage(message);
+        chrome.storage.local.get({masterMode: false}, (items) => {
+            console.log(items.masterMode);
+            if(items.masterMode){
+                message.action = 'startTest'
+            }
+            console.log("Message: ", message);
+            webSocket.sendWebsocketMessage(message);
+        });
+
 
       });
     });

@@ -54,6 +54,11 @@ function activateExtension(){
   chrome.storage.local.set({
     active: true 
   });
+  chrome.storage.local.get({ masterMode: false}, (items) => {
+    if(!items.masterMode){
+      document.getElementById('btnResults').disabled = true;
+    }
+  });
   backgroundPort.postMessage({action: "activate"});
 
   // refresh page to get http responses
