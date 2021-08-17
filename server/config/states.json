@@ -7,7 +7,7 @@
       "redirect": false,
       "websockets": 1,
       "corp": "",
-      "coop": "",
+      "coop": "unsafe-none",
       "xContentType": "nosniff"
     }
   },

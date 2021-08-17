@@ -29,22 +29,22 @@ block test
                 .col-md-4 
                     label.form-label(for='corp') CORP-Header
                     select#corp.form-select(name='corp') 
-                        option(value='') -
-                        option(value='same-site') same-site
-                        option(value='same-origin') same-origin
-                        option(value='cross-origin') cross-origin
+                        option(value='' selected= true) -
+                        option(value='same-site'  selected= states[state].properties.corp === 'same-site') same-site
+                        option(value='same-origin'  selected= states[state].properties.corp === 'same-origin') same-origin
+                        option(value='cross-origin'  selected= states[state].properties.corp === 'cross-origin') cross-origin
                 .col-md-4 
                     label.form-label(for='xContentType') X-Content-Type Header
                     select#xContentType.form-select(name='xContentType') 
-                        option(value='') -
-                        option(value='nosniff') nosniff
+                        option(value='' selected= true) -
+                        option(value='nosniff'  selected= states[state].properties.xContentType === 'nosniff') nosniff
                 .col-md-4 
                     label.form-label(for='coop') COOP-Header
                     select#coop.form-select(name='coop') 
-                        option(value='') -
-                        option(value='unsafe-none') unsafe-none
-                        option(value='same-origin-allow-popups') same-origin-allow-popups
-                        option(value='same-origin') same-origin
+                        option(value='' selected= true) -
+                        option(value='unsafe-none' selected= states[state].properties.coop === 'unsafe-none' ) unsafe-none
+                        option(value='same-origin-allow-popups' selected= states[state].properties.coop === 'same-origin-allow-popups') same-origin-allow-popups
+                        option(value='same-origin' selected= states[state].properties.coop === 'same-origin') same-origin
                 .col-md-4
                     .form-check
                         input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
