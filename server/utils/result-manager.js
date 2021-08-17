@@ -1,90 +1,97 @@
-// Manages the results
+// manages the results
 
-const { urlencoded } = require("express");
-const DBManager = require('./db-manager'); 
+const DBManager = require('./db-manager');
 
-let results = {};
-let activeTestID; 
+const results = {};
+let activeTestID;
+const usedHeaders = ['content-length', 'x-frame-options', 'x-content-type-options', 'cross-origin-opener-policy', 'cross-origin-resource-policy', 'content-security-policy', 'content-disposition'];
 
-function setResults(result, stateId){
-    console.log(result);
-    results[stateId] = {
-        'stateName': stateId,
-        'results': result
-    };
+function setResults(result, stateId) {
+  // normalize the results:
+  // let headers = result.headers;
+  // delete result.headers;
+  const { headers, ...normResult } = result;
+  for ( const header of usedHeaders) {
+    normResult[header] = headers[header];
+  }
+  results[stateId] = {
+    stateName: stateId,
+    results: normResult,
+  };
 
-}
+  console.log('results:', results);
+  DBManager.setState(normResult, stateId, activeTestID);
 
-function getResults(){
-    return results;
-}
-
-function getDifferences(){
-    console.log(results);
-    let differences = { headers: {}};
-    if(Object.keys(results).length > 0){
-        let states = Object.getOwnPropertyNames(results);
-        let properties = Object.getOwnPropertyNames(results[states[0]].results);
-        let availableHeaders = new Set();
-        for(const state of states){
-            let stateHeaders = Object.getOwnPropertyNames(results[state].results.headers);
-            stateHeaders.forEach(item => availableHeaders.add(item));
-        }
-        console.log(availableHeaders);
-        console.log("States: ", states);
-        console.log("Props: ", properties);
-        for(const property of properties){
-            console.log(property);
-            for (let i = 1; i < states.length; i++){
-                // check if differences found already
-                if(differences[property] === true){
-                    continue;
-                }
-                if (property === 'redirects'){
-                    differences[property] = (results[states[0]].results[property].length !== results[states[i]].results[property].length);
-                }else if(property === 'headers'){
-                    console.log(results[states[i]].results[property]);
-                    console.log(availableHeaders);
-                    for(const header of availableHeaders){
-                        console.log(header);
-                        if(differences[property][header] === true){
-                            continue;
-                        }
-                        differences[property][header] = (results[states[0]].results[property][header] !== results[states[i]].results[property][header]);
-                        //console.log(header);
-                        if(header === 'content-length'){
-                            console.log("Content-Length Found!!!!");
-                        }
-                    }
-                    
-                }else{
-                    differences[property] = (results[states[0]].results[property] !== results[states[i]].results[property]);
-                }
-                
-                console.log(results[states[i]].results[property]);
-            }
-        }
-        
-        // check if all headers from first
+  // update differences
+  if (activeTestID !== undefined) {
+    let differencesCount = 0;
+    // setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist
+    for (const [key, value] of Object.entries(getDifferences())) {
+      if (value === true) {
+        differencesCount += 1;
+      }
     }
-    console.log(differences);
-    return differences;
+    DBManager.updateDifferences(differencesCount, activeTestID);
+  }
 }
 
-// ToDo differences des vorherigen tests setzen
-function createNewTest(url){
-    if(activeTestID !== undefined){
-        //setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist.    
+function getResults() {
+  return results;
+}
+
+function getDifferences() {
+  console.log(results);
+  const differences = { };
+  if (Object.keys(results).length > 0) {
+    const states = Object.getOwnPropertyNames(results);
+    const properties = Object.getOwnPropertyNames(results[states[0]].results);
+    console.log('States: ', states);
+    console.log('Props: ', properties);
+    for (const property of properties) {
+      for (let i = 1; i < states.length; i++) {
+        // check if differences found already
+        if (differences[property] === true) {
+          continue;
+        } else {
+          differences[property] = (results[states[0]].results[property] !== results[states[i]].results[property]);
+        }
+      }
     }
-    DBManager.createTest(url, (id) => {
-        activeTestID = id;
-        console.log("New active ID:", activeTestID);
-    });
+  }
+  return differences;
+}
+
+function getDBDifferences(dbResults) {
+  const differences = {};
+  const properties = Object.getOwnPropertyNames(dbResults[0]);
+  console.log(properties);
+  for (const property of properties) {
+    console.log(property);
+    if (property !== 'id' || property !== 'test_id') {
+      for (let i = 1; i < dbResults.length; i++) {
+        if (differences[property] !== true) {
+          differences[property] = (dbResults[0][property] !== dbResults[i][property]);
+        }
+      }
+    }
+  }
+  return differences;
+}
+
+// ToDo differences des vorherigen tests setzen und states in db speichern
+function createNewTest(result, stateName, callback) {
+  DBManager.createTest(result.currentUrl, (id) => {
+    activeTestID = id;
+    console.log('New active ID:', activeTestID);
+    setResults(result, stateName);
+    callback();
+  });
 }
 
 module.exports = {
-    setResults: setResults,
-    getResults: getResults,
-    getDifferences: getDifferences,
-    createNewTest: createNewTest
+  setResults,
+  getResults,
+  getDifferences,
+  createNewTest,
+  getDBDifferences,
 };

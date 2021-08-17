@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS tests (
 CREATE TABLE IF NOT EXISTS states (
    id INTEGER PRIMARY KEY,  
    test_id INTEGER NOT NULL,
+   state_name TEXT,
    url TEXT,
    iframes INTEGER,
    http_status_code INTEGER,

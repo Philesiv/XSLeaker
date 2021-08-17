@@ -86,14 +86,17 @@ socketServer.on('connection', (socketClient) => {
             });
         }
         else if (socketClient.masterMode === true && jsonMessage.action === 'startTest'){
-            // create new test entry:
-            resultManager.createNewTest(jsonMessage.url);
-            //broadcast event
-            socketServer.clients.forEach((client) => {
-                if (client !== socketClient && client.readyState === WebSocket.OPEN){
-                    client.send(message);
-                }
+            // create new test entry and add values from master:
+            resultManager.createNewTest(jsonMessage.values, socketClient.stateName, () => {
+                //get results from other clients
+                socketServer.clients.forEach((client) => {
+                    if (client !== socketClient && client.readyState === WebSocket.OPEN){
+                        client.send(message);
+                    }
+                });
             });
+            //broadcast event
+            
         }
     });
 

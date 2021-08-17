@@ -25,11 +25,42 @@ block content
               th(scope='col') Differences
           tbody
             each row in rows      
-                tr
+                tr(data-bs-toggle="modal" data-bs-target="#testModal" data-bs-id=(row.id))
                     th(scope='row') #{row.id}
                     td #{row.url}
                     td #{row.formatedDate}
                     td #{row.differences}
+    // Modal
+    #testModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog.modal-xl.modal-dialog-scrollable
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Modal title
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                .modal-body
+                    | ...
+                //.modal-footer
+                    //button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                    //button.btn.btn-primary(type='button') Save changes
+    script. 
+        var modal = document.getElementById('testModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+          var row = event.relatedTarget;
+          var rowid = parseInt(row.getAttribute('data-bs-id'));
+          var modalbody = modal.getElementsByClassName('modal-body')[0];
+          console.log(Number.isNaN(rowid));
+          if(Number.isNaN(rowid)){
+            modalbody.innerHTML = "ID is not valide"
+          }else{
+          fetch('/history/'+ rowid)
+            .then(function(response) {
+              return response.text();
+            })
+            .then(function(body) {
+              modalbody.innerHTML = body;
+            });
+          }
+        });
 
 
 

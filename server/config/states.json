@@ -5,7 +5,10 @@
       "iframes": 2,
       "httpStatusCode": 200,
       "redirect": false,
-      "websockets": 1
+      "websockets": 1,
+      "corp": "",
+      "coop": "",
+      "xContentType": "nosniff"
     }
   },
   {

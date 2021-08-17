@@ -26,20 +26,20 @@ block content
 					tr(class={'bg-danger': differences.redirects === true})
 						th(scope='col') Redirect
 						each val, key in results
-							td.text-nowrap #{val.results.redirects.length}
+							td.text-nowrap #{val.results.redirects}
 					tr(class={'bg-danger': differences.websockets === true})
 						th(scope='col') WebSockets
 						each val, key in results
 							td.text-nowrap #{val.results.websockets} 
 					- var headers = ['content-length', 'x-frame-options', 'cross-origin-resource-policy', 'x-content-type-options', 'content-disposition', 'content-security-policy', 'cross-origin-opener-policy'];
 					each header in headers
-						tr(class={'bg-danger': differences.headers[header] === true})
+						tr(class={'bg-danger': differences[header] === true})
 							th.text-nowrap(scope='col') #{header}
 							each val, key in results
-								if(val.results.headers[header] === undefined)
+								if(val.results[header] === undefined)
 									td.text-nowrap -
 								else
-									td.text-nowrap #{val.results.headers[header]}
+									td.text-nowrap #{val.results[header]}
 
 
 
