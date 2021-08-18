@@ -1,35 +1,35 @@
 import * as idCatcher from './content/id-catcher';
 
-// if Master-Mode is active create a red border
-function toggleMasterMode(active){
-  if(active === true){
-    document.body.style.border = "5px solid red";
-  }else{
-    document.body.style.border = "none";
+// if master-mode is active create red border
+function toggleMasterMode(active) {
+  if (active === true) {
+    document.body.style.border = '5px solid red';
+  } else {
+    document.body.style.border = 'none';
   }
 }
-
+// check if master-mode is active when onload event is fired
 window.onload = () => {
-  // check if mastermode is active
-  chrome.storage.local.get({masterMode: false}, (items) => {
+  chrome.storage.local.get({ masterMode: false }, (items) => {
     toggleMasterMode(items.masterMode);
   });
 };
-
-
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      if (request.action == "getresults")
-        console.log("Iframes Count: " + frames.length.toString());
-        const ids = idCatcher.getIds();
-        sendResponse({iframes: frames.length.toString(), ids: ids});
-        return true;
-});
-
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-  if ("masterMode" in changes) {
+// get master-mode changes
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if ('masterMode' in changes) {
     toggleMasterMode(changes.masterMode.newValue);
   }
 });
+
+// extension message listener
+chrome.runtime.onMessage.addListener(
+  (request, sender, sendResponse) => {
+    if (request.action === 'getresults') {
+      const ids = idCatcher.getIds();
+      const iframeCount = window.frames.length.toString();
+      sendResponse({ iframes: iframeCount, ids });
+      return true;
+    }
+  },
+);
 
