@@ -18,7 +18,6 @@ function diffIDs(ids1, ids2) {
   return !checker(ids1, ids2);
 }
 
-
 function getDifferences() {
   console.log(results);
   const differences = { };
@@ -34,7 +33,7 @@ function getDifferences() {
           continue;
         } else if (property === 'ids') {
           differences[property] = diffIDs(results[states[0]].results.ids,
-                                          results[states[i]].results.ids);
+            results[states[i]].results.ids);
         } else {
           differences[property] = (results[states[0]].results[property] !== results[states[i]].results[property]);
         }
@@ -43,8 +42,6 @@ function getDifferences() {
   }
   return differences;
 }
-
-
 
 function setResults(result, stateId) {
   // normalize the results:
@@ -82,17 +79,19 @@ function getResults() {
 
 function getDBDifferences(dbResults) {
   const differences = {};
-  const properties = Object.getOwnPropertyNames(dbResults[0]);
-  console.log(properties);
-  for (const property of properties) {
-    console.log(property);
-    if (property !== 'id' || property !== 'test_id') {
-      for (let i = 1; i < dbResults.length; i++) {
-        if (differences[property] !== true) {
-          if (property === 'ids') {
-            differences[property] = diffIDs(dbResults[0].ids, dbResults[i].ids);
-          } else {
-            differences[property] = (dbResults[0][property] !== dbResults[i][property]);
+  if (Array.isArray(dbResults) && dbResults.length > 0) {
+    const properties = Object.getOwnPropertyNames(dbResults[0]);
+    console.log(properties);
+    for (const property of properties) {
+      console.log(property);
+      if (property !== 'id' || property !== 'test_id') {
+        for (let i = 1; i < dbResults.length; i++) {
+          if (differences[property] !== true) {
+            if (property === 'ids') {
+              differences[property] = diffIDs(dbResults[0].ids, dbResults[i].ids);
+            } else {
+              differences[property] = (dbResults[0][property] !== dbResults[i][property]);
+            }
           }
         }
       }

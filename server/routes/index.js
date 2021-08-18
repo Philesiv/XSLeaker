@@ -23,15 +23,23 @@ router.get('/history', (req, res) => {
     console.log('differences filter on!');
     differences = true;
   }
-
-  dbManager.getTests(urlfilter, differences, (rows) => {
+  let page = 1;
+  if (req.query.page) {
+    page = parseInt(req.query.page, 10);
+    if (isNaN(page) || page < 1) {
+      page = 1;
+    }
+  }
+  dbManager.getTests(urlfilter, differences, page, (rows) => {
     // convert date to iso string
     for (let index = 0, len = rows.length; index < len; index++) {
       rows[index].formatedDate = new Date(rows[index].date * 1000).toISOString();
     }
-    // console.log(rows);
-    res.render('history', {
-      title: 'Test History', currentUrl: '/history', rows, urlfilter, differences,
+    dbManager.getTestCount(urlfilter, differences, (testcount) => {
+      const pages = Math.ceil(testcount.count / 25);
+      res.render('history', {
+        title: 'Test History', currentUrl: '/history', rows, urlfilter, differences, pages, page,
+      });
     });
   });
 });

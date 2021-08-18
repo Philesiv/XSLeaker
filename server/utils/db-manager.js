@@ -24,7 +24,33 @@ db.serialize(() => {
   db.run(`INSERT INTO tests (url, differences)
             VALUES  ("test.org", 5),
                     ("google.com", 2),
-                    ("noxsleak.de", 0)`)
+                    ("noxsleak.de", 0),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test.org", 5),
+                    ("test2.org", 5),
+                    ("test2.org", 5),
+                    ("test2.org", 5),
+                    ("test2.org", 5)`)
     .all('SELECT * FROM tests', (err, rows) => {
       if (err) {
         throw err;
@@ -32,18 +58,18 @@ db.serialize(() => {
       console.log(rows);
     });
   db.run(`INSERT INTO states (test_id, state_name, url, iframes, http_status_code, redirects, websockets,
-                                content_length, x_frame_options, x_content_type_options, corp, coop, csp, content_disposition)
-            VALUES  (1, "state 1", "test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (1, "state 1", "test.org#test", 5, 201, 2, 0, 2100, null, null, null, null, null, null),
-                    (1, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null)
+                                content_length, x_frame_options, x_content_type_options, corp, coop, csp, content_disposition, ids)
+            VALUES  (1, "state 1", "test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (1, "state 1", "test.org#test", 5, 201, 2, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (1, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
+                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]")
             
             `)
     .all('SELECT * FROM states', (err, rows) => {
@@ -55,7 +81,7 @@ db.serialize(() => {
 });
 
 // ToDo: statement maybe needs escaping for url because it could contain % or underscores
-function getTests(url, differences, callback) {
+function getTests(url, differences, page, callback) {
   let sql = 'SELECT * FROM tests WHERE differences >= ?';
   const params = [];
   let minDifferences = 0;
@@ -68,8 +94,31 @@ function getTests(url, differences, callback) {
     url = `%${url}%`;
     params.push(url);
   }
-
+  const offset = (page - 1) * 25;
+  sql = `${sql} ORDER BY id LIMIT 25 OFFSET ?`;
+  params.push(offset);
   db.all(sql, params, (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    callback(rows);
+  });
+}
+
+function getTestCount(url, differences, callback) {
+  let sql = 'SELECT COUNT(*) AS count FROM tests WHERE differences >= ?';
+  const params = [];
+  let minDifferences = 0;
+  if (differences) {
+    minDifferences = 1;
+  }
+  params.push(minDifferences);
+  if (url !== '') {
+    sql = `${sql}AND url LIKE ?`;
+    url = `%${url}%`;
+    params.push(url);
+  }
+  db.get(sql, params, (err, rows) => {
     if (err) {
       throw err;
     }
@@ -171,4 +220,5 @@ module.exports = {
   getStates,
   setState,
   updateDifferences,
+  getTestCount,
 };

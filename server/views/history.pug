@@ -30,6 +30,18 @@ block content
                     td #{row.url}
                     td #{row.formatedDate}
                     td #{row.differences}
+        nav
+            ul.pagination.justify-content-center
+              li.page-item(class={'disabled': page <= 1})
+                  a.page-link(href='#' tabindex='-1' aria-disabled='true') Previous
+              - var n = 1;
+              while n <= pages
+                li.page-item(class={'active': page === n})
+                    a.page-link(href='/history?urlfilter=' + urlfilter + '&differences=' + differences + '&page=' + n) #{n++}
+              li.page-item(class={'disabled': page >= pages})
+                  a.page-link(href='#') Next
+
+
     // Modal
     #testModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl.modal-dialog-scrollable
@@ -42,6 +54,7 @@ block content
                 //.modal-footer
                     //button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                     //button.btn.btn-primary(type='button') Save changes
+                    
     script. 
         var modal = document.getElementById('testModal');
         modal.addEventListener('show.bs.modal', function (event) {
