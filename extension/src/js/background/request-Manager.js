@@ -2,8 +2,9 @@ let httpStatusCode;
 let headers;
 //let currentUrl;
 let redirects = [];
-let redirect;
-let clearRedirects = false;
+let redirect = false;
+let redirectCount = 0;
+let redirectUrl = '';
 let completedRequest = false;
 let webSocketCount = 0;
 
@@ -16,12 +17,21 @@ function completedListener(details){
     for (const header of details.responseHeaders){
         headers[header.name.toLowerCase()] = header.value;
     }
+    if (redirect === true){
+        redirect = false
+        redirectCount = redirects.length
+        redirectUrl = redirects[0].url
+    } else {
+        redirectCount = 0
+        redirectUrl = ''
+    }
     completedRequest = true;
     webSocketCount = 0;
     console.log(webSocketCount);
 }
 
 function redirectListener(details){
+    redirect = true;
     console.log("Redirecte happend!");
     console.log("Redirect data:", details);
     if(completedRequest){
@@ -58,6 +68,7 @@ export{
     removeRequestListener,
     httpStatusCode,
     headers,
-    redirects,
+    redirectCount,
+    redirectUrl,
     webSocketCount
 };

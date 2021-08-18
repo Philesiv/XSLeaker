@@ -35,10 +35,15 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
             chrome.storage.local.get({masterMode: false}, (items) => {
                 if(items.masterMode && changeInfo.url){
                     console.log(changeInfo);
-                    console.log("[Master-Mode] New URL: " + changeInfo.url);
+                    let url = changeInfo.url
+                    if (requestManager.redirectUrl !== ''){
+                        url = requestManager.redirectUrl
+                        console.log('Redirect happend, using url from redirect (' + url +')');
+                    }
+                    console.log("[Master-Mode] New URL: " + url);
                     let message = {
                         'action': 'changeSite',
-                        'url': changeInfo.url
+                        'url': url
                     };
                     webSocket.sendWebsocketMessage(message);
                 }
@@ -88,7 +93,7 @@ function getResults () {
                 'iframes': response.iframes,
                 'httpStatusCode': requestManager.httpStatusCode,
                 'currentUrl': tabs[0].url,
-                'redirects': requestManager.redirects.length,
+                'redirects': requestManager.redirectCount,
                 'headers': requestManager.headers,
                 'websockets': requestManager.webSocketCount,
                 'ids': response.ids
