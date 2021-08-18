@@ -2,7 +2,7 @@
 
 const DBManager = require('./db-manager');
 
-const results = {};
+let results = {};
 let activeTestID;
 const usedHeaders = ['content-length', 'x-frame-options', 'x-content-type-options', 'cross-origin-opener-policy', 'cross-origin-resource-policy', 'content-security-policy', 'content-disposition'];
 
@@ -102,6 +102,7 @@ function getDBDifferences(dbResults) {
 
 // ToDo differences des vorherigen tests setzen und states in db speichern
 function createNewTest(result, stateName, callback) {
+  results = {};
   DBManager.createTest(result.currentUrl, (id) => {
     activeTestID = id;
     console.log('New active ID:', activeTestID);

@@ -30,7 +30,7 @@
 				tr(class={'bg-danger': differences.ids === true})
 					th(scope='col') ids
 					each result in results
-						td.text-nowrap #{result.ids}
+						td #{result.ids}
 				tr(class={'bg-danger': differences.content_length === true})
 					th(scope='col') content-length
 					each result in results
@@ -54,7 +54,7 @@
 				tr(class={'bg-danger': differences.content_disposition === true})
 					th(scope='col') content-security-policy
 					each result in results
-						td.text-nowrap #{result.csp}
+						td #{result.csp}
 				tr(class={'bg-danger': differences.coop === true})
 					th(scope='col') cross-origin-opener-policy
 					each result in results
