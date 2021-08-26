@@ -21,7 +21,7 @@ db.serialize(() => {
     console.log(typeof (row));
   });
   // fill database with dummy data
-  db.run(`INSERT INTO tests (url, differences)
+  /*db.run(`INSERT INTO tests (url, differences)
             VALUES  ("test.org", 5),
                     ("google.com", 2),
                     ("noxsleak.de", 0),
@@ -78,6 +78,7 @@ db.serialize(() => {
       }
       console.log(rows);
     });
+    */
 });
 
 // ToDo: statement maybe needs escaping for url because it could contain % or underscores

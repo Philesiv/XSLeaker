@@ -29,7 +29,7 @@ function getDifferences() {
     for (const property of properties) {
       for (let i = 1; i < states.length; i++) {
         // check if differences found already
-        if (differences[property] === true) {
+        if (differences[property] === true || property === 'cookieProps') {
           continue;
         } else if (property === 'ids') {
           differences[property] = diffIDs(results[states[0]].results.ids,
@@ -66,6 +66,7 @@ function setResults(result, stateId) {
     // setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist
     for (const [key, value] of Object.entries(getDifferences())) {
       if (value === true) {
+        console.log('DIFFERENCES:', key, value);
         differencesCount += 1;
       }
     }
@@ -111,10 +112,19 @@ function createNewTest(result, stateName, callback) {
   });
 }
 
+function createNewEmptyTest(url) {
+  results = {};
+  DBManager.createTest(url, (id) => {
+    activeTestID = id;
+    console.log('New active ID:', activeTestID);
+  });
+}
+
 module.exports = {
   setResults,
   getResults,
   getDifferences,
   createNewTest,
   getDBDifferences,
+  createNewEmptyTest,
 };

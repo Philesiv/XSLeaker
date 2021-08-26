@@ -109,3 +109,30 @@ socketServer.on('connection', (socketClient) => {
     }
   });
 });
+
+
+function broadcastUrlMessage(testurl) {
+  console.log('broadcast URL');
+  const msg = {
+    action: 'changeSite',
+    url: testurl,
+  };
+  socketServer.clients.forEach((client) => {
+    client.send(JSON.stringify(msg));
+  });
+}
+
+function broadcastStartMessage() {
+  console.log('broadcast Start');
+  const msg = {
+    action: 'startTest',
+  };
+  socketServer.clients.forEach((client) => {
+    client.send(JSON.stringify(msg));
+  });
+}
+
+module.exports = {
+  broadcastUrlMessage,
+  broadcastStartMessage,
+};
