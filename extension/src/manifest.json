@@ -4,11 +4,13 @@
     "activeTab",
     "declarativeContent",
     "storage",
-     "tabs",
-      "*://*/*",
-      "ws://*/",
-      "wss://*/",
-      "webRequest"],
+    "tabs",
+    "*://*/*",
+    "ws://*/",
+    "wss://*/",
+    "webRequest",
+    "cookies"
+  ],
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
