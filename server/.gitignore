@@ -128,3 +128,12 @@ tmp/
 temp/
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+# yarn v2
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
