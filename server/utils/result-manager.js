@@ -19,13 +19,10 @@ function diffIDs(ids1, ids2) {
 }
 
 function getDifferences() {
-  console.log(results);
   const differences = { };
   if (Object.keys(results).length > 0) {
     const states = Object.getOwnPropertyNames(results);
     const properties = Object.getOwnPropertyNames(results[states[0]].results);
-    console.log('States: ', states);
-    console.log('Props: ', properties);
     for (const property of properties) {
       for (let i = 1; i < states.length; i++) {
         // check if differences found already
@@ -57,7 +54,6 @@ function setResults(result, stateId) {
     results: normResult,
   };
 
-  console.log('results:', results);
   DBManager.setState(normResult, stateId, activeTestID);
 
   // update differences
@@ -66,7 +62,6 @@ function setResults(result, stateId) {
     // setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist
     for (const [key, value] of Object.entries(getDifferences())) {
       if (value === true) {
-        console.log('DIFFERENCES:', key, value);
         differencesCount += 1;
       }
     }

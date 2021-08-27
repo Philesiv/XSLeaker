@@ -15,13 +15,11 @@ let connectionCount = 0;
 let masterActive = false;
 
 socketServer.on('connection', (socketClient) => {
-  log('connected!');
   log(`Number of clients: ${socketServer.clients.size}`);
   // set default properties for each connection
   socketClient.stateName = `state ${++connectionCount}`;
   socketClient.id = connectionCount;
   socketClient.masterMode = false;
-  log(`Set state name to: ${socketClient.stateName}`);
   socketClient.send(JSON.stringify({ action: 'getStateName', value: socketClient.stateName }));
   // hasMaster?
   if (masterActive) {
@@ -42,7 +40,7 @@ socketServer.on('connection', (socketClient) => {
       ResultManager.setResults(jsonMessage.values, socketClient.stateName);
     } else if (jsonMessage.action === 'setStateName') {
       socketClient.stateName = jsonMessage.value;
-      log(`New state name: ${socketClient.stateName}`);
+      //log(`New state name: ${socketClient.stateName}`);
     } else if (jsonMessage.action === 'setMasterMode') {
       if (jsonMessage.value === true) {
         socketClient.masterMode = true;
@@ -92,7 +90,6 @@ socketServer.on('connection', (socketClient) => {
   });
 
   socketClient.on('close', (socketClient) => {
-    log('Connection closed');
     log('Number of clients: ', socketServer.clients.size);
     if (socketClient.masterMode === true) {
       socketClient.masterMode = false;
@@ -112,7 +109,6 @@ socketServer.on('connection', (socketClient) => {
 
 
 function broadcastUrlMessage(testurl) {
-  console.log('broadcast URL');
   const msg = {
     action: 'changeSite',
     url: testurl,
@@ -123,7 +119,6 @@ function broadcastUrlMessage(testurl) {
 }
 
 function broadcastStartMessage() {
-  console.log('broadcast Start');
   const msg = {
     action: 'startTest',
   };

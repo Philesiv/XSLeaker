@@ -31,16 +31,12 @@ app.use(function (req, res, next) {
         // delete cookie if state is not defined
         let state = parseInt(req.cookies.state);
         if (typeof states[state] === 'undefined'){
-            console.log('clear cookies');
             res.clearCookie('state');
         }else{
             console.log("new state = " + state);
             res.locals.state =  state;
         }    
-    }else {
-        console.log("state not defined");
     }
-    console.log("Use called");
     next();
 });
 

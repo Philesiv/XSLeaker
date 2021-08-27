@@ -7,7 +7,7 @@ const db = new sqlite3.Database('./db/results.db', (err) => {
   if (err) {
     return console.error(err.message);
   }
-  console.log('Connected to results Database');
+  console.log('Connected to Database');
 });
 // enable foreign key support
 db.get('PRAGMA foreign_keys = ON');
@@ -16,10 +16,6 @@ db.serialize(() => {
   // read init file:
   const initSql = fs.readFileSync('./db/init.sql').toString();
   db.exec(initSql);
-  db.all('SELECT name FROM sqlite_master WHERE type = "table"', (err, row) => {
-    console.log(row);
-    console.log(typeof (row));
-  });
   // fill database with dummy data
   /*db.run(`INSERT INTO tests (url, differences)
             VALUES  ("test.org", 5),
@@ -128,14 +124,12 @@ function getTestCount(url, differences, callback) {
 }
 
 function createTest(url, callback) {
-  console.log('URL:', url);
   const sql = 'INSERT INTO tests (url, differences) VALUES  (?,0)';
   // use function because arrow function not working here (DAFUCK WHY NOT?)
   db.run(sql, url, function (err) {
     if (err) {
       throw err;
     }
-    console.log('ID', this.lastID);
     callback(this.lastID);
   });
 }
@@ -209,7 +203,7 @@ process.on('SIGINT', () => {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Close the database connection.');
+    console.log('Close the database connection...');
     // start normal exit..
     process.exit();
   });

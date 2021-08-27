@@ -42,7 +42,6 @@ function sendFinish() {
 }
 
 async function startTesting() {
-  console.log('startTesting()');
   if (!running) {
     running = true;
     const fileStream = fs.createReadStream('./config/testurls.txt');
@@ -53,7 +52,6 @@ async function startTesting() {
     counter = 0;
     for await (const url of rl) {
       if (!stoped) {
-        console.log('Testing URL:', url);
         currentUrl = url.trim();
         if (currentUrl !== '') {
           counter += 1;
@@ -72,7 +70,7 @@ async function startTesting() {
     stoped = false;
     sendFinish();
   } else {
-    console.log('Already Running!!!');
+    console.log('Test is already Running!');
   }
 }
 

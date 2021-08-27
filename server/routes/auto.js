@@ -12,8 +12,6 @@ router.get('/', (req, res) => {
       urlcount += 1;
     }
   }
-  console.log('COUNT:', urlcount);
-  console.log(testurls);
   res.render('automation', {
     title: 'Automation', currentUrl: '/automation', testurls,
   });
@@ -27,7 +25,6 @@ router.post('/', async (req, res) => {
   } else if (req.files.urlfile && req.files.urlfile.mimetype !== 'text/plain') {
     alert = 'Only text files allowed';
   } else {
-    console.log('Files', req.files.urlfile);
     testurls = req.files.urlfile.data.toString('utf8');
     await req.files.urlfile.mv('./config/testurls.txt');
   }

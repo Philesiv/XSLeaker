@@ -8,9 +8,7 @@ const router = express.Router();
 router.use('/testsite', (req, res, next) => {
   // const states = stateManager.getStates();
   if (res.locals.state === undefined) {
-    console.log('state not set, redirecting...');
     req.session.alert = 'State not set, please choose a state';
-
     res.redirect('/tests');
   } else {
     next();
@@ -45,7 +43,6 @@ router.post('/',
       return res.status(400).json({ errors: errors.array() });
     }
     const states = stateManager.getStates();
-    console.log(req.body);
     let alert; let message; let
       state;
     switch (req.body.action) {
@@ -64,15 +61,15 @@ router.post('/',
         if (isNaN(req.body.iframes) || isNaN(req.body.httpStatusCode)) {
           alert = 'Failure, please check if all values are valide';
         } else {
-          console.log(`New Iframe value: ${req.body.iframes}`);
-          console.log(`New HTTP status code: ${req.body.httpStatusCode}`);
-          console.log(`New WebSocket value: ${req.body.websockets}`);
+          // console.log(`New Iframe value: ${req.body.iframes}`);
+          // console.log(`New HTTP status code: ${req.body.httpStatusCode}`);
+          // console.log(`New WebSocket value: ${req.body.websockets}`);
           if (req.body.redirect !== undefined && req.body.redirect === 'on') {
             req.body.redirect = true;
           } else {
             req.body.redirect = false;
           }
-          console.log(`New Redirect Value: ${req.body.redirect}`);
+          // console.log(`New Redirect Value: ${req.body.redirect}`);
           const properties = {
             iframes: req.body.iframes,
             httpStatusCode: req.body.httpStatusCode,
@@ -98,7 +95,6 @@ router.post('/',
 router.get('/testsite', (req, res) => {
   const states = stateManager.getStates();
   const properties = states[res.locals.state].properties;
-  console.log('Cookies: ', req.cookies);
   if (properties.redirect === true) {
     res.redirect('http://example.com/');
   } else {

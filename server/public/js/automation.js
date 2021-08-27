@@ -11,9 +11,6 @@ for (const line of urllines) {
   }
 }
 
-console.log(urlcount);
-
-
 function resetStartBtn() {
   startBtn.innerHTML = 'Start Test';
   startBtn.disabled = false;
@@ -50,7 +47,6 @@ ws.onmessage = (event) => {
   console.log('WSMessage received:', message);
   if (message.action === 'updateUrl') {
     const percent = ((message.counter - 1) / urlcount) * 100;
-    console.log(percent);
     progressbar.style.width = `${percent}%`;
     document.getElementById('progressText').innerText = `Testing ${message.url}`;
   } else if (message.action === 'finished') {

@@ -14,14 +14,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/history', (req, res) => {
-  console.log('Params:', req.query);
   let urlfilter = '';
   if (req.query.urlfilter) {
     urlfilter = req.query.urlfilter.trim();
   }
   let differences = false;
   if (req.query.differences && req.query.differences === 'on') {
-    console.log('differences filter on!');
     differences = true;
   }
   let page = 1;
@@ -46,12 +44,10 @@ router.get('/history', (req, res) => {
 });
 
 router.get('/history/:testid', (req, res) => {
-  console.log('Params:', req.params.testid);
   dbManager.getStates(req.params.testid, (rows) => {
     for (let index = 0, len = rows.length; index < len; index++) {
       rows[index].ids = JSON.parse(rows[index].ids);
     }
-    console.log('Found', rows.length, 'states');
     res.render('testresults', {
       title: 'Results', currentUrl: '/', results: rows, differences: ResultManager.getDBDifferences(rows),
     });
