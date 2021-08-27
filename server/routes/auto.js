@@ -5,6 +5,14 @@ const autoManager = require('../utils/auto-manager');
 
 router.get('/', (req, res) => {
   const testurls = fs.readFileSync('./config/testurls.txt', 'utf-8');
+  const lines = testurls.split("\n");
+  let urlcount = 0;
+  for (const line of lines) {
+    if (line.trim() !== '') {
+      urlcount += 1;
+    }
+  }
+  console.log('COUNT:', urlcount);
   console.log(testurls);
   res.render('automation', {
     title: 'Automation', currentUrl: '/automation', testurls,
@@ -30,13 +38,12 @@ router.post('/', async (req, res) => {
 
 router.get('/start', (req, res) => {
   autoManager.startTesting();
-  //autoManager.stopTesting();
   res.send('OK');
 });
 
 router.get('/stop', (req,res) => {
   autoManager.stopTesting();
-  res.send('OK')
+  res.send('OK');
 });
 
 module.exports = router;

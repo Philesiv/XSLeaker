@@ -20,13 +20,16 @@ block content
         input.btn.btn-primary(type='submit' value='Upload')
     h3 Url List
     .mb-3
-      textarea.form-control(rows='3', readOnly="true")
+      textarea.form-control#urlList(rows='3', readOnly="true")
         |#{testurls}
 
     hr
     h2 Automation control
     p Start automatic url calling and see the progress
-    .row.md-2
+    .progress.position-relative.mb-4(style="height: 20px;")
+      .progress-bar#progress(role='progressbar' style='width: 0%' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100')
+      .justify-content-center.d-flex.position-absolute.w-100#progressText Start Test
+    .row.mx-0
       button.btn.btn-primary.col-2.me-3#startTest(type='button') Start Test
       button.btn.btn-primary.col-2#stopTest(type='button') Stop Test
   script(src="/js/automation.js")
