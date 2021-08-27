@@ -137,3 +137,7 @@ temp/
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+
+## Project stuff
+db/results.db

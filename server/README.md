@@ -1,4 +1,7 @@
-# node.js server
+# Server for XS-Leak Searcher extension
+
+## Dependencies
+
 
 ## Installation
 
