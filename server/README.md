@@ -8,3 +8,4 @@
 ## Usage
 
 - Run the server with ``yarn start``
+- Navigate to <http://localhost:3000/> to access the Webinterface
