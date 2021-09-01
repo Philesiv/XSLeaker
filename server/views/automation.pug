@@ -11,11 +11,11 @@ block content
           #{alert}
         button.btn-close(type='button' data-bs-dismiss='alert' aria-label='Close')
     h1 Automation 
-    p.lead Here you can upload a txt-file which contains a url per line. 
+    p.lead Upload a txt-file which contains a url per line. 
     .mb-3
       form(enctype='multipart/form-data', method='post',  id='uploadForm' )
         .mb-3
-          label.form-label(for='formFile') Upload Url-file
+          //label.form-label(for='formFile') Upload Url-file
           input#formFile.form-control(type='file' name="urlfile", required)
         input.btn.btn-primary(type='submit' value='Upload')
     h3 Url List
@@ -25,7 +25,7 @@ block content
 
     hr
     h2 Automation control
-    p Start automatic url calling and see the progress
+    p Start automatic url calling and testing
     .progress.position-relative.mb-4(style="height: 20px;")
       .progress-bar#progress(role='progressbar' style='width: 0%' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100')
       .justify-content-center.d-flex.position-absolute.w-100#progressText Start Test

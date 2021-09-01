@@ -16,65 +16,6 @@ db.serialize(() => {
   // read init file:
   const initSql = fs.readFileSync('./db/init.sql').toString();
   db.exec(initSql);
-  // fill database with dummy data
-  /*db.run(`INSERT INTO tests (url, differences)
-            VALUES  ("test.org", 5),
-                    ("google.com", 2),
-                    ("noxsleak.de", 0),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test.org", 5),
-                    ("test2.org", 5),
-                    ("test2.org", 5),
-                    ("test2.org", 5),
-                    ("test2.org", 5)`)
-    .all('SELECT * FROM tests', (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      console.log(rows);
-    });
-  db.run(`INSERT INTO states (test_id, state_name, url, iframes, http_status_code, redirects, websockets,
-                                content_length, x_frame_options, x_content_type_options, corp, coop, csp, content_disposition, ids)
-            VALUES  (1, "state 1", "test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (1, "state 1", "test.org#test", 5, 201, 2, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (1, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (2, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]"),
-                    (3, "state 1","test.org", 3, 200, 0, 0, 2100, null, null, null, null, null, null, "[]")
-            
-            `)
-    .all('SELECT * FROM states', (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      console.log(rows);
-    });
-    */
 });
 
 // ToDo: statement maybe needs escaping for url because it could contain % or underscores
@@ -197,6 +138,19 @@ function updateDifferences(differencesCount, activeTestID) {
   });
 }
 
+function clearHistory(callback) {
+  // backup db
+  fs.copyFile('./db/results.db', './db/results.db.bak', (err) => {
+    if (err) throw err;
+    // delete all data from db
+    db.serialize(() => {
+      const sql = "DELETE FROM states; DELETE FROM tests;";
+      db.exec(sql, callback);
+    });
+  });
+  
+}
+
 // Cleanup on exit
 process.on('SIGINT', () => {
   db.close((err) => {
@@ -209,6 +163,8 @@ process.on('SIGINT', () => {
   });
 });
 
+
+
 module.exports = {
   getTests,
   createTest,
@@ -216,4 +172,5 @@ module.exports = {
   setState,
   updateDifferences,
   getTestCount,
+  clearHistory,
 };

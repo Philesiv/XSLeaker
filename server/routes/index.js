@@ -43,7 +43,9 @@ router.get('/history', (req, res) => {
   });
 });
 
-router.get('/history/:testid', (req, res) => {
+
+
+router.get('/history/get/:testid', (req, res) => {
   dbManager.getStates(req.params.testid, (rows) => {
     for (let index = 0, len = rows.length; index < len; index++) {
       rows[index].ids = JSON.parse(rows[index].ids);
@@ -51,6 +53,12 @@ router.get('/history/:testid', (req, res) => {
     res.render('testresults', {
       title: 'Results', currentUrl: '/', results: rows, differences: ResultManager.getDBDifferences(rows),
     });
+  });
+});
+
+router.get('/history/delete', (req, res) => {
+  dbManager.clearHistory(() => {
+    res.redirect('/history');
   });
 });
 

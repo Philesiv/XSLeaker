@@ -2,7 +2,7 @@
   "name": "xs-server",
   "version": "0.0.1",
   "description": "nodejs server for the xs-extension",
-  "main": "index.js",
+  "main": "start.js",
   "scripts": {
     "start": "node start.js",
     "watch": "nodemon ./start.js"

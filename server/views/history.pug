@@ -3,6 +3,8 @@ extends layout
 
 block content
     .container.mt-4
+        h1 History
+        p.lead Search in the test history
         form.mb-3
           .row.mb-2
             label.col-sm-1.col-form-label(for='urlfilter') Url:
@@ -15,6 +17,9 @@ block content
                   | Only show Results with differences
             .col-sm-2
                 button.btn.btn-primary(type='submit') Search
+            .col-sm-2.float-end
+                button.btn.btn-danger.float-end(type='button' data-bs-toggle='modal' data-bs-target='#deleteModal') Delete History
+            
         hr
         table.table
           thead
@@ -41,8 +46,6 @@ block content
               li.page-item(class={'disabled': page >= pages})
                   a.page-link(href='#') Next
 
-
-    // Modal
     #testModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl.modal-dialog-scrollable
             .modal-content
@@ -51,29 +54,20 @@ block content
                     button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
                 .modal-body
                     | ...
-                //.modal-footer
-                    //button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                    //button.btn.btn-primary(type='button') Save changes
-                    
-    script. 
-        var modal = document.getElementById('testModal');
-        modal.addEventListener('show.bs.modal', function (event) {
-          var row = event.relatedTarget;
-          var rowid = parseInt(row.getAttribute('data-bs-id'));
-          var modalbody = modal.getElementsByClassName('modal-body')[0];
-          console.log(Number.isNaN(rowid));
-          if(Number.isNaN(rowid)){
-            modalbody.innerHTML = "ID is not valide"
-          }else{
-          fetch('/history/'+ rowid)
-            .then(function(response) {
-              return response.text();
-            })
-            .then(function(body) {
-              modalbody.innerHTML = body;
-            });
-          }
-        });
+
+    #deleteModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Delete History
+            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+          .modal-body
+            | Do you really want to delete the test history?
+          .modal-footer
+            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Dismiss
+            button.btn.btn-danger(type='button' onclick="location.href= '/history/delete'") DELETE
+ 
+    script(src="/js/history.js")      
 
 
 

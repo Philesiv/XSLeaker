@@ -13,7 +13,7 @@ function save_options() {
     });
 }
 
-function restore_options(){
+function restore_options() {
     chrome.storage.local.get({
         webSocketServer: 'ws://localhost:3030'
     }, (items) => {
