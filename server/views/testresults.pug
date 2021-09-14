@@ -30,7 +30,7 @@
 				tr(class={'bg-danger': differences.ids === true})
 					th(scope='col') ids
 					each result in results
-						td #{result.ids}
+						td #{result.ids.join(', ')}
 				tr(class={'bg-danger': differences.content_length === true})
 					th(scope='col') content-length
 					each result in results
