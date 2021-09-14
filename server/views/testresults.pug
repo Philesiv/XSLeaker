@@ -50,7 +50,7 @@
 				tr(class={'bg-danger': differences.content_disposition === true})
 					th(scope='col') content-disposition
 					each result in results
-						td.text-nowrap #{result.csp}
+						td.text-nowrap #{result.content_disposition}
 				tr(class={'bg-danger': differences.content_disposition === true})
 					th(scope='col') content-security-policy
 					each result in results
