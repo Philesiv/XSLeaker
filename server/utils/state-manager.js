@@ -11,6 +11,13 @@ function getStates() {
 }
 // ToDo: test the property values
 function setProperties(state, properties) {
+  if (properties.ids !== '') {
+    // save ids as array and delete empty ids
+    const ids = properties.ids.split(',').map((item) => item.trim()).filter((i) => i);
+    properties.ids = ids;
+  } else {
+    properties.ids = [];
+  }
   if (typeof states[state] !== 'undefined') {
     states[state].properties = properties;
   }

@@ -1,7 +1,8 @@
 extends ../tests
 
-block test 
-    p Hello there, Current State: #{JSON.stringify(states[state])}
+block test
+    p Current settings: 
+    pre #{JSON.stringify(states[state], null, 2)}
     - var n = 0;
     while n < states[state].properties.iframes
         - n++;
@@ -16,3 +17,7 @@ block test
             }
             ws.push(new WebSocket('wss://echo.websocket.org'));
         - n++;
+    hr
+    each id in states[state].properties.ids
+        input(type='text' id=id)
+          

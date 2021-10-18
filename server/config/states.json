@@ -2,13 +2,18 @@
   {
     "name": "State 1",
     "properties": {
-      "iframes": 2,
+      "iframes": 1,
       "httpStatusCode": 200,
       "redirect": false,
       "websockets": 1,
       "corp": "",
       "coop": "unsafe-none",
-      "xContentType": "nosniff"
+      "xContentType": "nosniff",
+      "csp": "test",
+      "ids": [
+        "id1",
+        "id2"
+      ]
     }
   },
   {
@@ -17,7 +22,8 @@
       "iframes": 3,
       "httpStatusCode": 404,
       "redirect": false,
-      "websockets": 5
+      "websockets": 5,
+      "ids": []
     }
   },
   {
@@ -29,7 +35,8 @@
       "websockets": 5,
       "corp": "",
       "coop": "",
-      "xContentType": ""
+      "xContentType": "",
+      "ids": []
     }
   }
 ]

@@ -45,10 +45,17 @@ block test
                         option(value='unsafe-none' selected= states[state].properties.coop === 'unsafe-none' ) unsafe-none
                         option(value='same-origin-allow-popups' selected= states[state].properties.coop === 'same-origin-allow-popups') same-origin-allow-popups
                         option(value='same-origin' selected= states[state].properties.coop === 'same-origin') same-origin
+                .col-md-6
+                    label.form-label(for='csp') Content Security Policy
+                    input#csp.form-control(type='text' name='csp' data-toggle="tooltip" title="Set CSP header" value=states[state].properties.csp)
+                .col-md-6 
+                    label.form-label(for='ids') Focusable IDs (comma separated)
+                    input#ids.form-control(type='text' name='ids' data-toggle="tooltip" title="Set focusable IDs" value=states[state].properties.ids.join(", "))
                 .col-md-4
                     .form-check
-                        input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
                         label.form-check-label(for='redirect') Redirect
+                        input#redirect.form-check-input(type='checkbox' name='redirect' checked=(states[state].properties.redirect))
+                        
 
                 .col-12.mt-4
                     input(type='hidden' name='action' value='setProperties')

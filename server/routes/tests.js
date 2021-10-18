@@ -37,14 +37,15 @@ router.post('/',
   body('corp').isIn(['', 'same-site', 'same-origin', 'cross-origin']),
   body('xContentType').isIn(['', 'nosniff']),
   body('coop').isIn(['', 'unsafe-none', 'same-origin-allow-popups', 'same-origin']),
+  body('csp').trim(),
+  body('ids').trim().escape(),
   (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     const states = stateManager.getStates();
-    let alert; let message; let
-      state;
+    let alert; let message; let state;
     switch (req.body.action) {
       case 'setState':
         if (isNaN(req.body.stateSelect) || typeof states[req.body.stateSelect] === 'undefined') {
@@ -58,12 +59,11 @@ router.post('/',
 
       case 'setProperties':
         state = res.locals.state;
+        console.log('CSP:', req.body.csp);
+        console.log('IDS:', req.body.ids);
         if (isNaN(req.body.iframes) || isNaN(req.body.httpStatusCode)) {
           alert = 'Failure, please check if all values are valide';
         } else {
-          // console.log(`New Iframe value: ${req.body.iframes}`);
-          // console.log(`New HTTP status code: ${req.body.httpStatusCode}`);
-          // console.log(`New WebSocket value: ${req.body.websockets}`);
           if (req.body.redirect !== undefined && req.body.redirect === 'on') {
             req.body.redirect = true;
           } else {
@@ -78,6 +78,8 @@ router.post('/',
             corp: req.body.corp,
             coop: req.body.coop,
             xContentType: req.body.xContentType,
+            csp: req.body.csp,
+            ids: req.body.ids,
           };
           stateManager.setProperties(state, properties);
         }
@@ -107,6 +109,9 @@ router.get('/testsite', (req, res) => {
     }
     if (properties.xContentType !== '' && properties.xContentType !== undefined) {
       res.header('X-Content-Type-Options', properties.xContentType);
+    }
+    if (properties.csp !== '' && properties.csp !== undefined) {
+      res.header('Content-Security-Policy', properties.csp);
     }
     res.render('tests/testsite', { title: 'Testpage', currentUrl: '/tests', states });
   }
