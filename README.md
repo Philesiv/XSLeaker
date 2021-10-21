@@ -1,2 +1,2 @@
-# XS-Leak-Searcher
-Searcher for cross-site leaks (XS-Leaks)
+# XSLeaker
+This tool helps to find Cross-Site Leaks(XSLeaks) on target websites.
