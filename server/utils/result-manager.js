@@ -59,7 +59,7 @@ function setResults(result, stateId) {
   // update differences
   if (activeTestID !== undefined) {
     let differencesCount = 0;
-    // setze differences von vorherigen test _> wir wissen erst bei neuen Test, dass test fertig ist
+    // set differences of last test -> we only know that a test is finised when a new test has started
     for (const [key, value] of Object.entries(getDifferences())) {
       if (value === true) {
         differencesCount += 1;

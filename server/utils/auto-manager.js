@@ -1,7 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const WebSocket = require('ws');
-const { broadcastUrlMessage, broadcastStartMessage } = require('../websocket');
+const { broadcastUrlMessage, broadcastStartMessage, broadcastHasMaster} = require('../websocket');
 const resultManager = require('./result-manager');
 
 let stoped = false;
@@ -46,6 +46,8 @@ function sendFinish() {
 
 async function startTesting() {
   if (!running) {
+    // disable Master-Mode on every client
+    broadcastHasMaster();
     running = true;
     const fileStream = fs.createReadStream('./config/testurls.txt');
     const rl = readline.createInterface({

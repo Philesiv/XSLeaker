@@ -85,10 +85,8 @@ socketServer.on('connection', (socketClient) => {
           }
         });
       });
-      // broadcast event
     }
   });
-
   socketClient.on('close', (socketClient) => {
     log('Number of clients: ', socketServer.clients.size);
     if (socketClient.masterMode === true) {
@@ -107,7 +105,7 @@ socketServer.on('connection', (socketClient) => {
   });
 });
 
-
+// changes the url of every client
 function broadcastUrlMessage(testurl) {
   const msg = {
     action: 'changeSite',
@@ -118,6 +116,7 @@ function broadcastUrlMessage(testurl) {
   });
 }
 
+// invokes the test on every client
 function broadcastStartMessage() {
   const msg = {
     action: 'startTest',
@@ -127,7 +126,19 @@ function broadcastStartMessage() {
   });
 }
 
+// disable the Master-Mode on every client
+function broadcastHasMaster() {
+  const msg = {
+    action: 'hasMaster',
+    value: true,
+  };
+  socketServer.clients.forEach((client) => {
+    client.send(JSON.stringify(msg));
+  });
+}
+
 module.exports = {
   broadcastUrlMessage,
   broadcastStartMessage,
+  broadcastHasMaster,
 };
