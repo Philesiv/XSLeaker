@@ -1,4 +1,4 @@
-# Server for XS-Leak Searcher
+# Server for XSLeaker
 
 ## Installation
 - Download and install node.js and npm (https://nodejs.org/en/download/)
