@@ -9,6 +9,9 @@ let running = false;
 let currentUrl = '';
 let counter = 0;
 
+let urlTimeout = 1000;
+let testTimeout = 1000;
+
 const wss = new WebSocket.Server({ port: 3031 });
 
 wss.on('connection', (ws) => {
@@ -58,9 +61,9 @@ async function startTesting() {
           sendUrl(currentUrl, counter);
           broadcastUrlMessage(currentUrl);
           resultManager.createNewEmptyTest(currentUrl);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, urlTimeout));
           broadcastStartMessage();
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, testTimeout));
         }
       } else {
         break;
@@ -74,6 +77,15 @@ async function startTesting() {
   }
 }
 
+function getTimeouts() {
+  return { urlTimeout, testTimeout };
+}
+
+function setTimeouts(newUrlTimeout, newTestTimeout) {
+  urlTimeout = newUrlTimeout;
+  testTimeout = newTestTimeout;
+}
+
 function stopTesting() {
   if (running === true) {
     stoped = true;
@@ -83,4 +95,6 @@ function stopTesting() {
 module.exports = {
   startTesting,
   stopTesting,
+  getTimeouts,
+  setTimeouts,
 };

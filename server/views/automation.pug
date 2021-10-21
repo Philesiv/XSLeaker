@@ -17,11 +17,26 @@ block content
         .mb-3
           //label.form-label(for='formFile') Upload Url-file
           input#formFile.form-control(type='file' name="urlfile", required)
+        input(type='hidden' name='action' value='uploadFile')
         input.btn.btn-primary(type='submit' value='Upload')
-    h3 Url List
+    h4 Url List
     .mb-3
       textarea.form-control#urlList(rows='3', readOnly="true")
         |#{testurls}
+    h4 Timeouts
+    p Set the timeouts that occur after URL changes and after invoking the test. Too short timeouts can lead to not fully loaded websites and incomplete test results.
+    form(method="post")
+      .row.gy-2.gx-3
+        .col-md-4
+          label.form-label(for='urlTimeout') URL change timeout (ms)
+          input#urlTimeout.form-control(type='number' name='urlTimeout' data-toggle="tooltip" title="Set the timeout after an url change in milliseconds" min="500" required value=timeouts.urlTimeout)
+        .col-md-4
+          label.form-label(for='testTimeout') Test timeout (ms)
+          input#testTimeout.form-control(type='number' name='testTimeout' data-toggle="tooltip" title="Set the timeout after the test started in milliseconds" min="500" required value=timeouts.testTimeout)
+        .col-md-4.align-self-end
+          input(type='hidden' name='action' value='setTimeouts')
+          button.btn.btn-primary(type='submit') Set Timeout
+
 
     hr
     h2 Automation control
