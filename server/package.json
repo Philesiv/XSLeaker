@@ -1,7 +1,7 @@
 {
-  "name": "xs-server",
-  "version": "0.0.1",
-  "description": "nodejs server for the xs-extension",
+  "name": "XSLeaker server",
+  "version": "0.1",
+  "description": "nodejs server for XSLeaker",
   "main": "start.js",
   "scripts": {
     "start": "node start.js",

@@ -1,7 +1,7 @@
 {
-  "name": "XS-Leak_Searcher",
-  "version": "0.0.1",
-  "description": "Browser extension to search for XS-Leaks",
+  "name": "XSLeaker",
+  "version": "0.1",
+  "description": "XSLeaker Chrome extension",
   "scripts": {
     "build": "node utils/build.js",
     "start": "node utils/webserver.js"

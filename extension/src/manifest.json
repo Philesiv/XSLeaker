@@ -1,5 +1,6 @@
 {
-  "name": "XS-Leak Searcher",
+  "name": "XSLeaker",
+  "homepage_url": "https://github.com/Philesiv/XSLeaker",
   "permissions": [
     "activeTab",
     "declarativeContent",
