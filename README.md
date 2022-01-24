@@ -30,5 +30,20 @@ This setup must be done only once, except if the user want to test more then *n*
 7. Within the master window, navigate to the site that should be tested. Every other window navigates to the same page.
    
 8. Start the testing with a click on the "Send Results" button in the popup of the master window.
-   
+
 9. Navigate to the web interface (e.g. http://localhost:3000) provided by Node.js to check for differences.
+
+For the next test of the same website, the user only has to navigate to the target URL with the master window and has to press the "Send Results" button again.
+
+## XSLeaker web interface
+The web interface that is hosted with node.js has following sites
+- **Results**: Shows the most recent testresults
+- **History**: Shows all tests that are done in the past. By clicking on a raw in the table the results of the test are shown.
+- **Automation**: The Automation page allows the user to upload a list of URLs that should be tested. The "Start Test" button navigates every connected browser window to one URL after another and runs the test. The results can be checked in the history. 
+  > **Note:** You first need to setup the states you want to test in the different windows.
+  
+  > Currently there is a Bug that the differences that are saved in the database are not always correct. Double check the differences by looking at the test results after the automated test.
+
+- **Test**: A test bench that can be used to test if XSLeaker is working properly. On http://localhost:3000/tests a state can be choosen. Then state dependent properties can be set. Once several browser windows with different states are open navigate to the testsite (http://localhost:3000/tests/testsite) with the master windows and run the test.  
+
+
