@@ -60,5 +60,5 @@ The web interface that is hosted with node.js has following sites
 
 - **Test**: A test bench that can be used to test if XSLeaker is working properly. On http://localhost:3000/tests a state can be choosen. Then state dependent properties can be set. Once several browser windows with different states are open navigate to the testsite (http://localhost:3000/tests/testsite) with the master windows and run the test.  
 ## Architecture
-[architecture](https://user-images.githubusercontent.com/8174548/150808926-5e947300-00a4-4bf8-9b95-8e89c7c81f2b.png)
+![architecture](https://user-images.githubusercontent.com/8174548/150808926-5e947300-00a4-4bf8-9b95-8e89c7c81f2b.png)
 
