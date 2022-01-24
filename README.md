@@ -3,7 +3,21 @@ XSLeaker is a tool that helps to find [XS-Leaks](https://xsleaks.dev/) on websit
 
 XSLeaker consists of two components, a chrome extension that is used to gather the resource values in different states and a node.js server that is used to compare and display the results.
 
-
+The following resource values are checked for differences 
+- URL
+- Number of iframes
+- HTTP status code 
+- Number of redirects
+- Number of WebSocket connections
+- IDs of focusable elements
+- HTTP Headers
+  - Content-Length
+  - X-Frame-Options
+  - X-Content-Type-Options
+  - Content-Disposition
+  - CORP (Cross-Origin-Resource-Policy)
+  - CSP (Content-Security-Policy)
+  - COOP (Cross-Origin-Opener-Policy)
 
 ## Setup
 Assuming the user want to test *n* different states the following setup must be done:
