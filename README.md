@@ -13,7 +13,7 @@ Assuming the user want to test *n* different states the following setup must be 
 2. Create *n* Chrome profiles, one for each state. As the profiles can be reused, the user only has to create new Chrome profiles if more than *n*  states should be tested.
 3. Install the XSLeaker Chrome extension for each profile.
 
-This setup must be done only once, except if the user needs more profiles as they want to test more states.
+This setup must be done only once, except if the user want to test more then *n* states.
 
 ## How to use it
 1. [Run the node.js server](server/README.md)
@@ -29,6 +29,6 @@ This setup must be done only once, except if the user needs more profiles as the
 
 7. Within the master window, navigate to the site that should be tested. Every other window navigates to the same page.
    
-8. Start the testing with a click on the ``Send Results'' button in the popup of the master window.
+8. Start the testing with a click on the "Send Results" button in the popup of the master window.
    
 9. Navigate to the web interface (e.g. http://localhost:3000) provided by Node.js to check for differences.
