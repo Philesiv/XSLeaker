@@ -29,7 +29,7 @@ Assuming the user want to test *n* different states the following setup must be 
 
 This setup must be done only once, except if the user want to test more then *n* states.
 
-## How to use it
+## How to use XSLeaker
 1. [Run the node.js server](server/README.md)
 
 2. Open *n* browser windows with different profiles.
