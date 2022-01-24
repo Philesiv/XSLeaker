@@ -3,7 +3,7 @@ XSLeaker is a tool that helps to find [XS-Leaks](https://xsleaks.dev/) on websit
 
 XSLeaker consists of two components, a chrome extension that is used to gather the resource values in different states and a node.js server that is used to compare and display the results.
 
-The following resource values are checked for differences 
+The following resource values are checked for differences:
 - URL
 - Number of iframes
 - HTTP status code 
@@ -62,3 +62,4 @@ The web interface that is hosted with node.js has following sites
 ## Architecture
 ![architecture](https://user-images.githubusercontent.com/8174548/150808926-5e947300-00a4-4bf8-9b95-8e89c7c81f2b.png)
 
+The Image shows the architecture of XSLeaker. The different browser windows with different states connects to the node.js applictation through WebSockets. The server provides a web inteface where the user can check the testresults (see [XSLeaker web interface](#xsleaker-web-interface)). The server saves the test results in an SQLite database.
