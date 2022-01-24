@@ -18,16 +18,17 @@ This setup must be done only once, except if the user needs more profiles as the
 ## How to use it
 1. [Run the node.js server](server/README.md)
 
-2. Open $n$ browser windows with different profiles.
+2. Open *n* browser windows with different profiles.
    
-3. Activate the browser extension in each window. This is done with the ``Activate'' button in the popup (see \autoref{fig:popup}). Optionally the user can choose a state name.
+3. Activate the browser extension in each window. This is done with the "Activate" button in the popup . 
+4. Optionally, choose a state name (e.g., admin account). This is recommended because it makes identifying the states in the results much easier.
     
-4. Setup the different states for the website that should be tested, one for each window(e.\,g., logging in as different users).
+5. Setup the different states for the website that should be tested, one for each window(e.g., logging in as different users).
     
-5. Choose one window and activate the \textit{Master Mode} (see \autoref{sec:masterMode}) through the switch in the popup window. The other windows now follow URL changes from the master window.
+6. Choose one window and activate the *Master Mode* through the switch in the popup window. The other windows now follow URL changes from the master window.
 
-6. Within the master window, navigate to the site that should be tested. Every other window navigates to the same page.
+7. Within the master window, navigate to the site that should be tested. Every other window navigates to the same page.
    
-7. Start testing the \gls{xslr} values with a click on the ``Send Results'' button in the popup of the master window.
+8. Start the testing with a click on the ``Send Results'' button in the popup of the master window.
    
-8. Navigate to the web interface provided by Node.js to check for differences.
+9. Navigate to the web interface (e.g. http://localhost:3000) provided by Node.js to check for differences.
