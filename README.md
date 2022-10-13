@@ -31,10 +31,6 @@ This setup must be done only once, except if the user want to test more then *n*
 
 ## How to use XSLeaker
 
-Click on the image to see XSLeaker in action. In the video I show how we can compare the values from different states
-
-[![Watch the video](https://img.youtube.com/vi/hckth6MKP_w/hqdefault.jpg)](https://youtu.be/hckth6MKP_w)
-
 1. [Run the node.js server](server/README.md)
 
 2. Open *n* browser windows with different profiles.
@@ -53,6 +49,10 @@ Click on the image to see XSLeaker in action. In the video I show how we can com
 9. Navigate to the web interface (e.g. http://localhost:3000) provided by Node.js to check for differences.
 
 For the next test of the same website, the user only has to navigate to the target URL with the master window and has to press the "Send Results" button again.
+
+Click on the image to see XSLeaker in action:
+
+[![Watch the video](https://img.youtube.com/vi/hckth6MKP_w/hqdefault.jpg)](https://youtu.be/hckth6MKP_w)
 
 ## XSLeaker web interface
 The web interface that is hosted with node.js has following sites
