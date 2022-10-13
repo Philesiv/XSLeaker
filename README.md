@@ -30,6 +30,11 @@ Assuming the user want to test *n* different states the following setup must be 
 This setup must be done only once, except if the user want to test more then *n* states.
 
 ## How to use XSLeaker
+
+Watch this video to see XSLeaker in action. Here I used the embedded test bench to show how we can compare the values from different states
+
+[![Watch the video](https://img.youtube.com/vi/hckth6MKP_w/default.jpg)](https://youtu.be/hckth6MKP_w)
+
 1. [Run the node.js server](server/README.md)
 
 2. Open *n* browser windows with different profiles.
